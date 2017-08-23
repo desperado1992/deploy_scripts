@@ -1,10 +1,14 @@
 from AmbariService import AmbariService
-import json
+import json, sys
 import time
-base_url = 'http://192.168.0.220:8080/api/v1/clusters/sugo_test'
+
+cluster_name = sys.argv[2]
+server_IP = sys.argv[1]
+host_file = sys.argv[3]
+
+base_url = "http://" + server_IP + ":8080/api/v1/clusters/" + cluster_name
 ambariService = AmbariService()
 
-host_file = "host_service.json"
 host_service = open(host_file)
 json_array = json.loads(host_service.read())
 

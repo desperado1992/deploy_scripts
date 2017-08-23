@@ -5,6 +5,7 @@ conf_dir=$2
 init_url=$baseurl/deploy_scripts/centos6/ambari-server
 
 #在ambari-server节点配置ssh
+rm -rf /root/.ssh
 ./ssh.sh $baseurl
 
 #将/root/.ssh/id_rsa.pub放到yum源目录下的SG/Centos6/1.0/:

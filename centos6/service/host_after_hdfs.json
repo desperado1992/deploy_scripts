@@ -1,0 +1,85 @@
+[
+  {
+    "YARN_SUGO": {
+      "SUGO_RESOURCEMANAGER": [
+        "test1.sugo.vm",
+        "test2.sugo.vm"
+      ],
+      "SUGO_NODEMANAGER": [
+        "test3.sugo.vm"
+      ],
+      "SUGO_PROXYSERVER": [
+        "test3.sugo.vm"
+      ],
+      "SUGO_YARN_CLIENT": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ]
+    }
+  },
+  {
+    "MAPREDUCE_SUGO": {
+      "SUGO_HISTORYSERVER": [
+        "test3.sugo.vm"
+      ],
+      "SUGO_MAPREDUCE_CLIENT": [
+        "test3.sugo.vm"
+      ]
+    }
+  },
+  { 
+    "KAFKA_SUGO": {
+      "SUGO_KAFKA_BROKER": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ]
+    }
+  },
+  {
+    "GATEWAY_SUGO": {
+      "SUGO_GATEWAY_SERVER": [
+        "test1.sugo.vm"
+      ],
+	  "SUGO_GATEWAY_CLIENT": [
+        "test1.sugo.vm"
+      ]
+    }
+  },
+  {
+    "DRUIDIO_SUGO": {
+      "SUGO_DRUID_HISTORICAL": [
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ],
+      "SUGO_DRUID_BROKER": [
+        "test1.sugo.vm"
+      ],
+      "SUGO_DRUID_COORDINATOR": [
+        "test3.sugo.vm"
+      ],
+      "SUGO_DRUID_OVERLORD": [
+        "test1.sugo.vm"
+      ],
+      "SUGO_DRUID_MIDDLE_MANAGER": [
+        "test2.sugo.vm"
+      ],
+      "SUGO_DRUID_CLIENT": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ]
+    }
+  },
+  {
+    "ASTRO_SUGO": {
+      "SUGO_ANALYSE_UI": [
+        "test1.sugo.vm"
+      ],
+      "SUGO_ANALYSE_CLIENT": [
+        "test1.sugo.vm"
+      ]
+    }
+  }
+]

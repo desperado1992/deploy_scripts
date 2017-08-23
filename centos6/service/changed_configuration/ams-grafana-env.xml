@@ -1,0 +1,17 @@
+<configuration>
+  <property require-input="true">
+    <name>metrics_grafana_password</name>
+    <value>admin</value>
+    <property-type>PASSWORD</property-type>
+    <display-name>Grafana Admin Password</display-name>
+    <description>
+      Metrics Grafana password. This value cannot be modified by Ambari
+      except on initial install. Please make sure the password change in
+      Grafana is reflected back in Ambari.
+    </description>
+    <value-attributes>
+      <overridable>false</overridable>
+      <type>password</type>
+    </value-attributes>
+  </property>
+</configuration>

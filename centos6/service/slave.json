@@ -1,0 +1,116 @@
+{
+  "items" : [
+    {
+      "ServiceComponentInfo" : {
+        "component_name" : "SUGO_DATANODE",
+        "service_name" : "HDFS_SUGO"
+      },
+      "host_components" : [
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_DATANODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "DataNode",
+            "host_name" : "test1.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        },
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_DATANODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "DataNode",
+            "host_name" : "test2.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        },
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_DATANODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "DataNode",
+            "host_name" : "test3.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        }
+      ]
+    },
+    {
+      "ServiceComponentInfo" : {
+        "component_name" : "SUGO_JOURNALNODE",
+        "service_name" : "HDFS_SUGO"
+      },
+      "host_components" : [
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_JOURNALNODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "JournalNode",
+            "host_name" : "test1.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        },
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_JOURNALNODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "JournalNode",
+            "host_name" : "test2.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        },
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_JOURNALNODE",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "JournalNode",
+            "host_name" : "test3.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTED"
+          }
+        }
+      ]
+    },
+    {
+      "ServiceComponentInfo" : {
+        "component_name" : "SUGO_ZKFC",
+        "service_name" : "HDFS_SUGO"
+      },
+      "host_components" : [
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_ZKFC",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "ZKFailoverController",
+            "host_name" : "test1.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTING"
+          }
+        },
+        {
+          "HostRoles" : {
+            "component_name" : "SUGO_ZKFC",
+            "desired_admin_state" : "INSERVICE",
+            "display_name" : "ZKFailoverController",
+            "host_name" : "test2.sugo.vm",
+            "maintenance_state" : "OFF",
+            "stale_configs" : false,
+            "state" : "STARTING"
+          }
+        }
+      ]
+    }
+  ]
+}
