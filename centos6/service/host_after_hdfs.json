@@ -57,13 +57,13 @@
         "test1.sugo.vm"
       ],
       "SUGO_DRUID_COORDINATOR": [
-        "test3.sugo.vm"
+        "test2.sugo.vm"
       ],
       "SUGO_DRUID_OVERLORD": [
         "test1.sugo.vm"
       ],
       "SUGO_DRUID_MIDDLE_MANAGER": [
-        "test2.sugo.vm"
+        "test3.sugo.vm"
       ],
       "SUGO_DRUID_CLIENT": [
         "test1.sugo.vm",

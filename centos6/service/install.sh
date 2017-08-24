@@ -89,7 +89,7 @@ sleep 15
       # hdfs初始化
       echo "formating hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       #创建pg数据库并格式化hdfs
-      ./pgdb_hdfsformat.sh $pw1
+      ./pgdb_hdfsformat.sh $pw1 $server_IP $cluster_name
       break
     else
       sleep 2

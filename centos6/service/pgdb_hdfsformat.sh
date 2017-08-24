@@ -2,6 +2,8 @@
 
 
 pw1=$1
+server_IP=$2
+cluster_name=$3
 
 namenode1=`cat ../ambari-agent/host | sed -n "1p" |awk '{print $2}'`
 namenode2=`cat ../ambari-agent/host | sed -n "2p" |awk '{print $2}'`
@@ -110,19 +112,22 @@ spawn ssh $namenode2
             expect "*]\$*"
 EOF
 
+echo `pwd`
 #启动hdfs所有组件
-/usr/bin/expect <<-EOF
-set timeout 100000
-spawn ssh $namenode1
-        expect {
-        "*yes/no*" { send "yes\n"
-        expect "*assword:" { send "$pw1\n" } }
-        "*assword:" { send "$pw1\n" }
-        "*]#*" { send "\n"}
-                "*]#*" 
-        }
-            expect "*]#*"
-        send "/opt/apps/hadoop_sugo/sbin/start-dfs.sh\n"
-            expect "*]#**"
-EOF
+python start_service.py $server_IP $cluster_name host_hdfs.json
+
+#/usr/bin/expect <<-EOF
+#set timeout 100000
+#spawn ssh $namenode1
+#        expect {
+#        "*yes/no*" { send "yes\n"
+#        expect "*assword:" { send "$pw1\n" } }
+#        "*assword:" { send "$pw1\n" }
+#        "*]#*" { send "\n"}
+#                "*]#*" 
+#        }
+#            expect "*]#*"
+#        send "/opt/apps/hadoop_sugo/sbin/start-dfs.sh\n"
+#            expect "*]#**"
+#EOF
 
