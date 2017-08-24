@@ -167,6 +167,6 @@ fi
 #创建集群并安装服务
 cd ../service
 echo `pwd`
-echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password"
-source install.sh $http_port $ambari_ip $cluster_name $server_password
+echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password, baseurl:$baseurl"
+source install.sh $http_port $ambari_ip $cluster_name $server_password $baseurl
 cd -

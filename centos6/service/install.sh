@@ -5,6 +5,8 @@ http_port=$1
 server_IP=$2
 cluster_name=$3
 pw1=$4
+baseurl=$5
+
 #pw=`cat ../ambari-server/ip.txt | sed -n "1p" |awk '{print $2}'`
 
 if [ "$1" = "-h" ] || [ "$1" = "-help" ];then
@@ -107,18 +109,31 @@ python install_service.py $server_IP $cluster_name host_after_hdfs.json
 sleep 10
 
 #判断astro是否已经安装完成
-  astro_dir="/opt/apps/astro_sugo"
-  while [ ! -d "$astro_dir" ]
-  do
-    astro_dir="/opt/apps/astro_sugo"
-    if [ ! -d "$astro_dir" ];then
-      echo "waiting for astro to be installed~~~"
-      sleep 2
-      continue
-    else
-      break
-    fi
-  done
+/usr/bin/expect <<-EOF
+set timeout 100000
+spawn ssh $namenode1
+                expect "*]#*"
+          send "wget $baseurl/deploy_scripts/centos6/service/test_astro.sh\n"
+                expect "*]#*"
+          send "chmod 755 test_astro.sh \n"
+                expect "*]#*"
+          send "./test_astro.sh \n"
+                expect "*]#*"
+          send "rm -rf test_astro.sh \n"
+                expect "*]#*"
+EOF
+#  astro_dir="/opt/apps/astro_sugo"
+#  while [ ! -d "$astro_dir" ]
+#  do
+#    astro_dir="/opt/apps/astro_sugo"
+#    if [ ! -d "$astro_dir" ];then
+#      echo "waiting for astro to be installed~~~"
+#      sleep 2
+#      continue
+#    else
+#      break
+#    fi
+#  done
 
 
 
