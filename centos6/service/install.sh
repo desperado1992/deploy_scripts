@@ -26,6 +26,10 @@ sed -i "s/test1.sugo.vm/${namenode1}/g" host_after_hdfs.json
 sed -i "s/test2.sugo.vm/${namenode2}/g" host_after_hdfs.json
 sed -i "s/test3.sugo.vm/${datanode1}/g" host_after_hdfs.json
 
+sed -i "s/test1.sugo.vm/${namenode1}/g" host_hdfs.json
+sed -i "s/test2.sugo.vm/${namenode2}/g" host_hdfs.json
+sed -i "s/test3.sugo.vm/${datanode1}/g" host_hdfs.json
+
 sed -i "s/test1.sugo.vm/${namenode1}/g" changed_configuration/astro-site.xml
 sed -i "s/test1.sugo.vm/${namenode1}/g" changed_configuration/common.runtime.xml
 
