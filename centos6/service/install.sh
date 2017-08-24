@@ -59,7 +59,7 @@ sleep 5
 
 #安装hdfs及之前的服务
 python install_service.py $server_IP $cluster_name host_until_hdfs.json
-sleep 10 
+sleep 15 
 
   #判断hdfs是否已经安装，如果没有则等待安装完成
   hdfs_dir="/opt/apps/hadoop_sugo"
@@ -68,14 +68,13 @@ sleep 10
     hdfs_dir="/opt/apps/hadoop_sugo"
     if [ ! -d "$hdfs_dir" ];then
       echo "waiting for hdfs to be installed~~~"
-      sleep 2
+      sleep 3
       continue
     else
       break
     fi
   done
 
-sleep 5
  #启动hdfs及之前的服务
  echo "starting service postgres, redis, zookeeper and hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
  python start_service.py $server_IP $cluster_name host_until_hdfs.json
