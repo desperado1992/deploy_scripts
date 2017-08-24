@@ -95,7 +95,7 @@ sleep 15
       # hdfs初始化
       echo "formating hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       #创建pg数据库并格式化hdfs
-      ./pgdb_hdfsformat.sh $pw1 $server_IP $cluster_name
+      ./hdfsformat.sh $pw1 $server_IP $cluster_name
       break
     else
       sleep 2
@@ -113,13 +113,13 @@ sleep 10
 set timeout 100000
 spawn ssh $namenode1
                 expect "*]#*"
-          send "wget $baseurl/deploy_scripts/centos6/service/test_astro.sh\n"
+          send "wget $baseurl/deploy_scripts/centos6/service/pg_db_astro.sh\n"
                 expect "*]#*"
-          send "chmod 755 test_astro.sh \n"
+          send "chmod 755 pg_db_astro.sh\n"
                 expect "*]#*"
-          send "./test_astro.sh \n"
+          send "./pg_db_astro.sh\n"
                 expect "*]#*"
-          send "rm -rf test_astro.sh \n"
+          send "rm -rf pg_db_astro.sh\n"
                 expect "*]#*"
 EOF
 #  astro_dir="/opt/apps/astro_sugo"

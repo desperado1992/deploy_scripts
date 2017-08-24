@@ -9,25 +9,6 @@ namenode1=`cat ../ambari-agent/host | sed -n "1p" |awk '{print $2}'`
 namenode2=`cat ../ambari-agent/host | sed -n "2p" |awk '{print $2}'`
 pw2=`cat ../ambari-server/ip.txt | grep $namenode2 |awk '{print $2}'`
 
-#创建druid、sugo_astro/pio库
-postgres_path="/opt/apps/postgres_sugo"
-if [ -d "$postgres_path" ];
-then
-postgres_pid=`head -1 /data1/postgres/data/postmaster.pid`
-    if [ "$postgres_pid" = "" ];
-        then
-        su - postgres -c "/opt/apps/postgres_sugo/bin/pg_ctl -D /data1/postgres/data -l /data1/postgres/log/postgres.log start"
-        sleep 3
-    fi
-
-cd /opt/apps/postgres_sugo
-bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE druid WITH OWNER = postgres ENCODING = UTF8;"
-bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE sugo_astro WITH OWNER = postgres ENCODING = UTF8;"
-bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE pio WITH OWNER = postgres ENCODING = UTF8;"
-cd -
-fi
-
-
 #配置namenode的hdfs用户之间的免密码登录
 ./passwdless.sh $namenode1 $pw1 $namenode2 $pw2
 
