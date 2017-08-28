@@ -8,7 +8,7 @@
     cd ~/stand-alone_deploy
     mkdir -p /opt/apps
     yum install -y wget openssh-clients vim 
-    source init_centos6.sh -hostname test01.sugo.vm
+    ./init_centos6.sh -hostname test01.sugo.vm
     source /etc/profile
 
     测试
