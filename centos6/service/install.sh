@@ -1,18 +1,63 @@
 #!/bin/bash
 
+function print_usage(){
+  echo "Usage: start [-options]"
+  echo " where options include:"
+  echo "     -help                          帮助文档"
+  echo "     -http_port <port>              http服务端口号"
+  echo "     -server_IP <server_IP>         ambari-server所在主机的IP"
+  echo "     -cluster_name <name>           集群名称"
+  echo "     -server_password <server_password>    ambari-server所在主机的root用户密码"
+
+}
+
+#cd `dirname $0`
+http_port=80
+server_IP=""
+cluster_name=""
+server_password=""
+
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+           -help)  print_usage; exit 0 ;;
+       -http_port) http_port=$2 && shift 2;;
+       -server_IP) server_IP=$2 && shift 2;;
+       -cluster_name) cluster_name=$2 && shift 2;;
+       -server_password) server_password=$2 && shift 2;;
+    esac
+done
+
+
 journalnode_stat="STARTEDSTARTEDSTARTED"
-http_port=$1
-server_IP=$2
-cluster_name=$3
-pw1=$4
-baseurl=$5
+baseurl=http://$server_IP:$http_port/sugo_yum
 
 #pw=`cat ../ambari-server/ip.txt | sed -n "1p" |awk '{print $2}'`
 
-if [ "$1" = "-h" ] || [ "$1" = "-help" ];then
-    echo 'usage : ./install $http_port $server_IP $cluster_name $server_password'
-    exit
+if [ "$http_port" -eq 0 ]
+  then
+    echo "-http_port is required!"
+    exit 1
 fi
+
+if [ "$server_IP" = "" ]
+  then
+    echo "-server_IP is required!"
+    exit 1
+fi
+
+if [ "$cluster_name" = "" ]
+  then
+    echo "-cluster_name is required!"
+    exit 1
+fi
+
+if [ "$server_password" = "" ]
+  then
+    echo "-server_password is required!"
+    exit 1
+fi
+
 
 sort ../ambari-server/host > ../ambari-agent/host
 
@@ -95,7 +140,7 @@ sleep 15
       # hdfs初始化
       echo "formating hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       #创建pg数据库并格式化hdfs
-      ./hdfsformat.sh $pw1 $server_IP $cluster_name
+      ./hdfsformat.sh $server_password $server_IP $cluster_name
       break
     else
       sleep 2

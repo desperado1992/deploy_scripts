@@ -14,6 +14,7 @@ function print_usage(){
   echo "     -skip_createdir <skip_createdir>   不创建元数据存储目录"
   echo "     -skip_ssh <skip_ssh>           不安装ssh免密码"
   echo "     -skip_jdk <skip_jdk>           不安装jdk"
+  echo "     -skip_cluster_services <skip_cluster_services>    不创建集群且不安装服务，部署过程仅进行到ambari-server安装完成"
 }
 
 #cd `dirname $0`
@@ -28,6 +29,7 @@ skip_http=0
 skip_createdir=0
 skip_ssh=0
 skip_jdk=0
+skip_cluster_services=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -42,6 +44,7 @@ while [[ $# -gt 0 ]]; do
        -skip_createdir) skip_createdir=1 && shift ;;
        -skip_ssh) skip_ssh=1 && shift ;;
        -skip_jdk) skip_jdk=1 && shift ;;
+       -skip_cluster_services) skip_cluster_services=1 && shift ;;
     esac
 done
 
@@ -54,18 +57,6 @@ fi
 if [ "$ambari_ip" = "" ]
   then
     echo "-ambari_ip is required!"
-    exit 1
-fi
-
-if [ "$cluster_name" = "" ]
-  then
-    echo "-cluster_name is required!"
-    exit 1
-fi
-
-if [ "$server_password" = "" ]
-  then
-    echo "-server_password is required!"
     exit 1
 fi
 
@@ -165,8 +156,25 @@ if [ "$skip_ambari" = "" ];then
 fi
 
 #创建集群并安装服务
-cd ../service
-echo `pwd`
-echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password, baseurl:$baseurl"
-source install.sh $http_port $ambari_ip $cluster_name $server_password $baseurl
-cd -
+if [ $skip_cluster_services -eq 0 ]
+  then
+    if [ "$cluster_name" = "" ]
+      then
+        echo "-cluster_name is required!"
+        exit 1
+    fi
+
+    if [ "$server_password" = "" ]
+      then
+        echo "-server_password is required!"
+        exit 1
+    fi
+
+    cd ../service
+    echo `pwd`
+    echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password, baseurl:$baseurl"
+    source install.sh -http_port $http_port -server_IP $ambari_ip -cluster_name $cluster_name -server_password $server_password
+    cd -
+  else
+    echo "~~~~~~~~~~~ssh-password-less skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+fi
