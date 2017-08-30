@@ -58,8 +58,32 @@ if [ "$server_password" = "" ]
     exit 1
 fi
 
+#修改host文件并根据ascii码对hostname进行排序
+cd ../ambari-server
 
-sort ../ambari-server/host > ../ambari-agent/host
+rm -rf host1 host2
+rm -rf ../ambari-agent/host
+
+cat host | while read line;
+do
+ip1=`echo $line|awk '{print $1}'`
+hn1=`echo $line|awk '{print $2}'`
+echo "$hn1 $ip1" >> host1
+done
+
+sort host1 >> host2
+
+cat host2 | while read line;
+do
+hn2=`echo $line|awk '{print $1}'`
+ip2=`echo $line|awk '{print $2}'`
+echo "$ip2 $hn2" >> ../ambari-agent/host
+done
+
+rm -rf host1 host2
+
+cd -
+#sort ../ambari-server/host > ../ambari-agent/host
 
 namenode1=`cat ../ambari-agent/host | sed -n "1p" |awk '{print $2}'`
 namenode2=`cat ../ambari-agent/host | sed -n "2p" |awk '{print $2}'`
