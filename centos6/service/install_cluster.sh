@@ -14,15 +14,17 @@ curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"Repositories":{"bas
 cd ../ambari-agent
 python install_agent.py $cluster_name $server_IP "host"
 
+
 #判断agent是否已经安装完成并启动
+yum install -y lsof
 cat ../ambari-server/host |while read line
 do
 ip=`echo $line | awk '{print $1}'`
-res=`netstat -nap |grep $ip  |grep 8441  |awk '{print $5}' |grep $ip`
+res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
 
   while [ "$res" = "" ]
   do
-  res=`netstat -nap |grep $ip  |grep 8441  |awk '{print $5}' |grep $ip`
+  res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
         if [ "$res" = "" ];then
          echo "waiting for agent to start~~~"
          sleep 1
