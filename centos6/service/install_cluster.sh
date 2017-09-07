@@ -21,7 +21,7 @@ cat ../ambari-server/host |while read line
 do
 ip=`echo $line | awk '{print $1}'`
 res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
-
+echo $res
   while [ "$res" = "" ]
   do
   res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
