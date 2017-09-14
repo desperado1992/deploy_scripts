@@ -17,24 +17,20 @@ python install_agent.py $cluster_name $server_IP "host"
 
 #判断agent是否已经安装完成并启动
 yum install -y lsof
-cat ../ambari-server/host |while read line
-do
-ip=`echo $line | awk '{print $1}'`
-res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
-echo $res
-  while [ "$res" = "" ]
-  do
-  res=`lsof -n -i:8441 | grep $ip |awk '{print $9}'`
-        if [ "$res" = "" ];then
-         echo "waiting for agent to start~~~"
-         sleep 1
-         continue
-        else
-         break
-    fi
-  done
-echo "$ip agent connected~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+printf "waiting for agent to start"
+while true;do
+res=`lsof -n -i:8441 | grep $server_IP |awk '{print $9}' | wc -l`
+num_host=`cat ../ambari-agent/host | wc -l`
+  if [ $res != $[$num_host + 1] ];then
+    printf "."
+    sleep 1
+    continue
+  else
+    echo ""
+    break
+  fi
 done
+
 
 #注册ambari-agent
 python regist_agent.py $cluster_name $server_IP "host"

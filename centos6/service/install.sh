@@ -113,14 +113,16 @@ fi
 
 #判断ambari-server是否已经启动，如果没有，则等待启动完成
 ambari=`netstat -ntlp | grep 8080`
+printf "waiting for ambari-server to start"
 while [ "$ambari" = "" ]
 do
   ambari=`netstat -ntlp | grep 8080`
   if [ "$ambari" = "" ];then
-    echo "waiting for ambari-server to start~~~"
+    printf "."
     sleep 1
     continue
   else
+    echo ""
     break
   fi
 done
@@ -138,14 +140,16 @@ sleep 15
 
   #判断hdfs是否已经安装，如果没有则等待安装完成
   hdfs_dir="/opt/apps/hadoop_sugo"
+  printf "waiting for hdfs to be installed" 
   while [ ! -d "$hdfs_dir" ]
   do
     hdfs_dir="/opt/apps/hadoop_sugo"
     if [ ! -d "$hdfs_dir" ];then
-      echo "waiting for hdfs to be installed~~~"
-      sleep 3
+      printf "."
+      sleep 2
       continue
     else
+      echo ""
       break
     fi
   done
@@ -156,6 +160,7 @@ sleep 15
  sleep 10
  
   #判断所有journalnode是否都已经启动
+  printf "waiting for journalnode to start"
   while true;do
   curl -u admin:admin -H "X-Requested-By: ambari" -X GET "http://$server_IP:8080/api/v1/clusters/$cluster_name/components/?ServiceComponentInfo/category=SLAVE&fields=ServiceComponentInfo/service_name,host_components/HostRoles/display_name,host_components/HostRoles/host_name,host_components/HostRoles/state,host_components/HostRoles/maintenance_state,host_components/HostRoles/stale_configs,host_components/HostRoles/ha_state,host_components/HostRoles/desired_admin_state,&minimal_response=true&_=1499937079425" > slave.json
   python slave.py slave.json > slave.txt
@@ -167,8 +172,8 @@ sleep 15
       ./hdfsformat.sh $server_password $server_IP $cluster_name
       break
     else
-      sleep 2
-          echo "waiting for journalnode to start~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      sleep 3
+          printf "."
       continue
     fi
   done
