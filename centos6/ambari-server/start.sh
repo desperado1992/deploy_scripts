@@ -60,6 +60,20 @@ if [ "$ambari_ip" = "" ]
     exit 1
 fi
 
+if [ $skip_cluster_services -eq 0 ]
+  then
+    if [ "$cluster_name" = "" ]
+      then
+        echo "-cluster_name is required!"
+        exit 1
+    fi
+
+    if [ "$server_password" = "" ]
+      then
+        echo "-server_password is required!"
+        exit 1
+    fi
+fi
 
 #安装yum源
 if [ $skip_http -eq 0 ]
@@ -158,17 +172,6 @@ fi
 #创建集群并安装服务
 if [ $skip_cluster_services -eq 0 ]
   then
-    if [ "$cluster_name" = "" ]
-      then
-        echo "-cluster_name is required!"
-        exit 1
-    fi
-
-    if [ "$server_password" = "" ]
-      then
-        echo "-server_password is required!"
-        exit 1
-    fi
 
     cd ../service
     echo `pwd`
