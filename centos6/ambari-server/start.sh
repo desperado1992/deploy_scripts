@@ -4,17 +4,17 @@ function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
   echo "     -help                          帮助文档"
-  echo "     -http_port <port>              http服务端口号"
-  echo "     -ambari_ip <ip>                ambari-server所在主机的IP"
-  echo "     -cluster_name <name>           集群名称"
-  echo "     -server_password <password>    ambari-server所在主机的root用户密码"
-
-  echo "     -skip_ambari <ambari-server>   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari skip_ambari; 需要安装则不添加该参数"
-  echo "     -skip_http <skip_http>         不安装yum源服务"
-  echo "     -skip_createdir <skip_createdir>   不创建元数据存储目录"
-  echo "     -skip_ssh <skip_ssh>           不安装ssh免密码"
-  echo "     -skip_jdk <skip_jdk>           不安装jdk"
-  echo "     -skip_cluster_services <skip_cluster_services>    不创建集群且不安装服务，部署过程仅进行到ambari-server安装完成"
+  echo "     -http_port <port>              (必填)http服务端口号"
+  echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
+  echo "     -cluster_name <name>           (需要一键创建集群及安装服务时，必填；否则选填)集群名称"
+  echo "     -server_password <password>    (需要一键创建集群及安装服务时，必填；否则选填)ambari-server所在主机的root用户密码"
+  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
+  echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
+  echo "     -skip_http                     不安装yum源服务"
+  echo "     -skip_createdir                不创建元数据存储目录"
+  echo "     -skip_ssh                      不安装ssh免密码"
+  echo "     -skip_jdk                      不安装jdk"
+  echo "     -skip_cluster_services         不创建集群且不安装服务，部署过程仅进行到ambari-server安装完成"
 }
 
 #cd `dirname $0`
@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
        -ambari_ip) ambari_ip=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
        -server_password) server_password=$2 && shift 2;;
-       -skip_ambari) skip_ambari=$2 && shift 2;;
+       -skip_ambari) skip_ambari=1 && shift ;;
        -hostname) hostname=$2 && shift 2;;
        -skip_http) skip_http=1 && shift ;;
        -skip_createdir) skip_createdir=1 && shift ;;
