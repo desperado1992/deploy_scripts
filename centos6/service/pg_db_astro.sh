@@ -29,8 +29,8 @@ fi
       sleep 2
       continue
     else
-      echo ""
       echo "astro has been installed!~~~"
       break
     fi
   done
+echo ""

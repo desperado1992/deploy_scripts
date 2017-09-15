@@ -26,11 +26,10 @@ num_host=`cat ../ambari-agent/host | wc -l`
     sleep 1
     continue
   else
-    echo ""
     break
   fi
 done
-
+echo ""
 
 #注册ambari-agent
 python regist_agent.py $cluster_name $server_IP "host"

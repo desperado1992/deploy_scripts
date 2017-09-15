@@ -122,10 +122,10 @@ do
     sleep 1
     continue
   else
-    echo ""
     break
   fi
 done
+echo ""
 
 #创建集群、更新基础url，安装注册ambari-agent
 ./install_cluster.sh $http_port $server_IP $cluster_name
@@ -149,10 +149,10 @@ sleep 15
       sleep 2
       continue
     else
-      echo ""
       break
     fi
   done
+  echo ""
 
  #启动hdfs及之前的服务
  echo "starting service postgres, redis, zookeeper and hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -173,10 +173,11 @@ sleep 15
       break
     else
       sleep 3
-          printf "."
+      printf "."
       continue
     fi
   done
+  echo ""
 
 #安装hdfs之后得所有服务
 python install_service.py $server_IP $cluster_name host_after_hdfs.json
