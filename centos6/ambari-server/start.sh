@@ -40,6 +40,7 @@ if [ "$hn" = "$server_hn" ];then
 server_password=$pw
 fi
 done
+echo $server_password
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
