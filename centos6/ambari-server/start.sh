@@ -4,9 +4,9 @@ function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
   echo "     -help                          帮助文档"
-  echo "     -http_port <port>              (必填)http服务端口号"
+  echo "     -http_port <port>              http服务端口号，如不填写该参数则默认为81"
   echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
-  echo "     -cluster_name <name>           (需要一键创建集群及安装服务时，必填；否则选填)集群名称"
+  echo "     -cluster_name <name>           集群名称，默认: sugo_cluster，如需其它名称请添加此参数"
   echo "     -server_password <password>    (需要一键创建集群及安装服务时，必填；否则选填)ambari-server所在主机的root用户密码"
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
@@ -18,9 +18,9 @@ function print_usage(){
 }
 
 #cd `dirname $0`
-http_port=80
+http_port=81
 ambari_ip=""
-cluster_name=""
+cluster_name="sugo_cluster"
 server_password=""
 
 skip_ambari=""
