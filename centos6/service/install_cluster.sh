@@ -4,6 +4,21 @@ httpd_port=$1
 server_IP=$2
 cluster_name=$3
 
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/HDFS_SUGO
+curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/HDFS_SUGO
+
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/REDIS_SUGO
+curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/REDIS_SUGO
+
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/ZOOKEEPER_SUGO
+curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/ZOOKEEPER_SUGO
+
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/POSTGRES_SUGO
+curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/POSTGRES_SUGO
+
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/AMBARI_METRICS
+curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/AMBARI_METRICS
+
 #创建集群
 curl -u admin:admin -H "X-Requested-By: ambari" -X POST -d '{"Clusters": {"version" : "SG-1.0"}}' http://$server_IP:8080/api/v1/clusters/$cluster_name
 
@@ -29,6 +44,7 @@ num_host=`cat ../ambari-agent/host | wc -l`
     break
   fi
 done
+sleep 3
 echo ""
 
 #注册ambari-agent
