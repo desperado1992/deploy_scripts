@@ -6,7 +6,7 @@
 cd ../../..
 data_dir=`echo $(dirname $(pwd))`
 echo $data_dir
-conf_file=$1
+cd -
 
 if [ $data_dir == "/" ]
 then
@@ -14,7 +14,7 @@ then
 	
 	echo "数据将直接保存在/data1 和 /data2 目录中，请确保此目录有足够的空间"
 	
-	cat deploy_scripts/centos6/$conf_file |while read line;
+	cat ip.txt |while read line;
 	do
 	hn=`echo $line|awk '{print $1}'`
 	pw=`echo $line|awk '{print $2}'`
@@ -41,7 +41,7 @@ else
 	ln -s $data_dir/data1 /
 	ln -s $data_dir/data2 /
 
-	cat deploy_scripts/centos6/$conf_file |while read line;
+	cat ip.txt |while read line;
 	do
 	hn=`echo $line|awk '{print $1}'`
 	pw=`echo $line|awk '{print $2}'`

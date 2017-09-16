@@ -4,9 +4,9 @@ function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
   echo "     -help                          帮助文档"
-  echo "     -http_port <port>              http服务端口号，如不填写该参数则默认为81"
+  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数则默认为: 81"
   echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
-  echo "     -cluster_name <name>           集群名称，默认: sugo_cluster，如需其它名称请添加此参数"
+  echo "     -cluster_name <name>           集群名称，如果不填写,则该参数则默认为: sugo_cluster"
   echo "     -server_password <password>    (需要一键创建集群及安装服务时，必填；否则选填)ambari-server所在主机的root用户密码"
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
@@ -78,16 +78,10 @@ fi
 #安装yum源
 if [ $skip_http -eq 0 ]
   then
-    http_server=`ps -ef | grep httpd | grep -v "grep httpd"`
-    if [ "$http_server" = "" ];then
-      ./sugo_yum_inst.sh $http_port
+    ./sugo_yum_inst.sh $http_port
       echo "~~~~~~~~~~~~httpd installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    else
-      ./sugo_yum_inst_not.sh $http_port
-      echo "~~~~~~~~~~~the httpd port has been changed~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    fi
   else
-    echo "~~~~~~~~~~~~http server for sugo_yum skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "~~~~~~~~~~~~http server skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi
 
 #修改astro包名
@@ -116,7 +110,7 @@ fi
 #创建元数据存储目录
 if [ $skip_createdir -eq 0 ]
   then
-    ./create_datadir.sh ambari-server/ip.txt
+    ./create_datadir.sh
     echo "~~~~~~~~~~~datadir success created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
     echo "~~~~~~~~~~~create datadir skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -127,17 +121,17 @@ fi
 echo "~~~~~~~~~~~init centos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #修改ambari-server节点的hostname
-if [ $skip_hostname != "skip_hostname" ]
-  then
-    hostname $hostname
-    sed -i "s/HOSTNAME=.*/HOSTNAME=${hostname}/g" /etc/sysconfig/network
-    #按照ip.txt内的域名修改其它所有节点的hostname
-    ./hostname.sh ip.txt
-    cat new_hostname >> /etc/hosts
-    echo "~~~~~~~~~~~hostname success changed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  else 
-    echo "~~~~~~~~~~~change hostname skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-fi
+#if [ $skip_hostname != "skip_hostname" ]
+#  then
+#    hostname $hostname
+#    sed -i "s/HOSTNAME=.*/HOSTNAME=${hostname}/g" /etc/sysconfig/network
+#    #按照ip.txt内的域名修改其它所有节点的hostname
+#    ./hostname.sh ip.txt
+#    cat new_hostname >> /etc/hosts
+#    echo "~~~~~~~~~~~hostname success changed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#  else 
+#    echo "~~~~~~~~~~~change hostname skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#fi
 
 #配置ssh免密码登录
 if [ $skip_ssh -eq 0 ]

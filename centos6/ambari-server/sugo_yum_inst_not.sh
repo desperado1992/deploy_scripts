@@ -10,6 +10,11 @@ service iptables stop
 chkconfig iptables off
 setenforce 0
 
+http_server=`ps -ef | grep httpd | grep -v "grep httpd"`
+if [ "$http_server" = "" ];then
+	yum install -y httpd
+fi
+
 #修改http端口号
 sed -i "s/`cat /etc/httpd/conf/httpd.conf |grep "Listen " |grep -v "#" |awk '{print $2}'`/${1}/" /etc/httpd/conf/httpd.conf
 
