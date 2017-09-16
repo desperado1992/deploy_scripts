@@ -7,7 +7,7 @@ function print_usage(){
   echo "     -http_port <port>              http服务端口号，如果不填写,则该参数则默认为: 81"
   echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
   echo "     -cluster_name <name>           集群名称，如果不填写,则该参数则默认为: sugo_cluster"
-  echo "     -server_password <password>    (需要一键创建集群及安装服务时，必填；否则选填)ambari-server所在主机的root用户密码"
+
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
   echo "     -skip_http                     不安装yum源服务"
@@ -21,7 +21,6 @@ function print_usage(){
 http_port=81
 ambari_ip=""
 cluster_name="sugo_cluster"
-server_password=""
 
 skip_ambari=""
 hostname="skip_hostname"
@@ -31,15 +30,24 @@ skip_ssh=0
 skip_jdk=0
 skip_cluster_services=0
 
+server_hn=`hostname`
+cat ip.txt |while read line;
+do
+hn=`echo $line|awk '{print $1}'`
+pw=`echo $line|awk '{print $2}'`
+
+if [ "$hn" = "$server_hn" ];then
+server_password=$pw
+fi
+done
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
            -help)  print_usage; exit 0 ;;
        -http_port) http_port=$2 && shift 2;;
        -ambari_ip) ambari_ip=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
-       -server_password) server_password=$2 && shift 2;;
        -skip_ambari) skip_ambari=1 && shift ;;
-       -hostname) hostname=$2 && shift 2;;
        -skip_http) skip_http=1 && shift ;;
        -skip_createdir) skip_createdir=1 && shift ;;
        -skip_ssh) skip_ssh=1 && shift ;;
@@ -68,11 +76,6 @@ if [ $skip_cluster_services -eq 0 ]
         exit 1
     fi
 
-    if [ "$server_password" = "" ]
-      then
-        echo "-server_password is required!"
-        exit 1
-    fi
 fi
 
 #安装yum源
