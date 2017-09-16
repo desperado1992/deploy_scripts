@@ -30,11 +30,12 @@ skip_ssh=0
 skip_jdk=0
 skip_cluster_services=0
 
-server_hn=`hostname`
+
 cat ip.txt |while read line;
 do
 hn=`echo $line|awk '{print $1}'`
 pw=`echo $line|awk '{print $2}'`
+server_hn=`hostname`
 
 if [ "$hn" = "$server_hn" ];then
 server_password=$pw
