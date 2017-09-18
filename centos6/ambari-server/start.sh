@@ -4,8 +4,8 @@ function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
   echo "     -help                          帮助文档"
-  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数则默认为: 81"
   echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
+  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数则默认为: 81"
   echo "     -cluster_name <name>           集群名称，如果不填写,则该参数则默认为: sugo_cluster"
 
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
@@ -46,8 +46,8 @@ done<ip.txt
 while [[ $# -gt 0 ]]; do
     case "$1" in
            -help)  print_usage; exit 0 ;;
-       -http_port) http_port=$2 && shift 2;;
        -ambari_ip) ambari_ip=$2 && shift 2;;
+       -http_port) http_port=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
        -skip_ambari) skip_ambari=1 && shift ;;
        -skip_http) skip_http=1 && shift ;;
