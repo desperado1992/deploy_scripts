@@ -31,17 +31,17 @@ skip_jdk=0
 skip_cluster_services=0
 
 
-cat ip.txt |while read line;
+while read line
 do
 hn=`echo $line|awk '{print $1}'`
 pw=`echo $line|awk '{print $2}'`
 server_hn=`hostname`
 
 if [ "$hn" = "$server_hn" ];then
-server_password=$pw
+server_password="$pw"
 fi
-done
-echo $server_password
+done<ip.txt
+
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
