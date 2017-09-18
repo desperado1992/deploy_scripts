@@ -177,6 +177,4 @@ if [ $skip_cluster_services -eq 0 ]
     echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password, baseurl:$baseurl"
     source install.sh -http_port $http_port -server_IP $ambari_ip -cluster_name $cluster_name -server_password $server_password
     cd -
-  else
-    echo "~~~~~~~~~~~ssh-password-less skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi

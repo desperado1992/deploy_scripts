@@ -167,7 +167,7 @@ sleep 15
   state=`sed ':a;N;$!ba;s/\n//g' slave.txt`
     if [ "$state" = "$journalnode_stat" ];then
       # hdfs初始化
-      echo "formating hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      echo "formating hdfs~~~"
       #创建pg数据库并格式化hdfs
       ./hdfsformat.sh $server_password $server_IP $cluster_name
       break
@@ -177,9 +177,9 @@ sleep 15
       continue
     fi
   done
-  echo ""
+  echo "hdfs format finished~~~"
 
-#安装hdfs之后得所有服务
+#安装hdfs之后的所有服务
 python install_service.py $server_IP $cluster_name host_after_hdfs.json
 sleep 10
 
