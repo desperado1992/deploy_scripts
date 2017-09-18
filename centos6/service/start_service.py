@@ -15,4 +15,4 @@ json_array = json.loads(host_service.read())
 for service in json_array:
     for key, value in service.items():
         ambariService.start(key, base_url)
-        time.sleep(5)
+        time.sleep(10)
