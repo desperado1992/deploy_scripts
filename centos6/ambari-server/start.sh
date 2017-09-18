@@ -5,8 +5,8 @@ function print_usage(){
   echo " where options include:"
   echo "     -help                          帮助文档"
   echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
-  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数则默认为: 81"
-  echo "     -cluster_name <name>           集群名称，如果不填写,则该参数则默认为: sugo_cluster"
+  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数默认设置为: 81"
+  echo "     -cluster_name <name>           集群名称，如果不填写,则该参数默认设置为: sugo_cluster"
 
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
