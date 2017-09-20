@@ -163,7 +163,7 @@ if [ "$skip_ambari" = "" ];then
     #安装ambari-server
     ./ambari_server_inst.sh $baseurl
   else
-    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari skip_ambari"
+    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
     exit 1
   fi
 fi

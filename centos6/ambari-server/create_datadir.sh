@@ -20,7 +20,7 @@ then
 	pw=`echo $line|awk '{print $2}'`
 	local_hn=`hostname`
 
-    if [ "$hn" != "$local_hn" ];then	
+        if [ "$hn" != "$local_hn" ];then
 	/usr/bin/expect <<-EOF
 	set timeout 100000
 	spawn ssh $hn
@@ -36,9 +36,8 @@ then
 		send "mkdir /data1 /data2\n"
 			expect "*]#*"
 	EOF
+        fi
 	done
-	fi
-
 else
 	mkdir -p $data_dir/data1 $data_dir/data2 
 	ln -s $data_dir/data1 /
@@ -48,9 +47,9 @@ else
 	do
 	hn=`echo $line|awk '{print $1}'`
 	pw=`echo $line|awk '{print $2}'`
-	local_hn=`hostname`
+        local_hn=`hostname`
 
-    if [ "$hn" != "$local_hn" ];then
+        if [ "$hn" != "$local_hn" ];then	
 	/usr/bin/expect <<-EOF
 	set timeout 100000
 	spawn ssh $hn
@@ -73,6 +72,6 @@ else
 		send "ln -s $data_dir/data2 /data2\n"
 			expect "*]#*"
 	EOF
+        fi
 	done
-	fi
 fi
