@@ -8,9 +8,10 @@ function print_usage(){
   echo "     -http_port <port>              http服务端口号，如果不填写,则该参数默认设置为: 81"
   echo "     -cluster_name <name>           集群名称，如果不填写,则该参数默认设置为: sugo_cluster"
 
-  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
+  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari "
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
   echo "     -skip_http                     不安装yum源服务"
+  echo "     -skip_hosts                    不设置/etc/hosts文件中IP与hostname的映射"
   echo "     -skip_createdir                不创建元数据存储目录"
   echo "     -skip_ssh                      不安装ssh免密码"
   echo "     -skip_jdk                      不安装jdk"
@@ -25,6 +26,7 @@ cluster_name="sugo_cluster"
 skip_ambari=""
 hostname="skip_hostname"
 skip_http=0
+skip_hosts=0
 skip_createdir=0
 skip_ssh=0
 skip_jdk=0
@@ -51,6 +53,7 @@ while [[ $# -gt 0 ]]; do
        -cluster_name) cluster_name=$2 && shift 2;;
        -skip_ambari) skip_ambari=1 && shift ;;
        -skip_http) skip_http=1 && shift ;;
+       -skip_hosts) skip_hosts=1 && shift ;;
        -skip_createdir) skip_createdir=1 && shift ;;
        -skip_ssh) skip_ssh=1 && shift ;;
        -skip_jdk) skip_jdk=1 && shift ;;
@@ -80,6 +83,14 @@ if [ $skip_cluster_services -eq 0 ]
 
 fi
 
+if [ "$skip_ambari" = "" ];then
+  ambari_server_dir="/var/lib/ambari-server"
+  if [ -d "$ambari_server_dir" ];then
+    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先remove掉ambari-server并彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
+    exit 1
+  fi
+fi
+
 #安装yum源
 if [ $skip_http -eq 0 ]
   then
@@ -104,9 +115,9 @@ baseurl=http://$ambari_ip:$http_port/sugo_yum
 echo "~~~~~~~~~~~~directory created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #分发hosts文件
-if [ $skip_ssh -eq 0 ]
+if [ $skip_hosts -eq 0 ]
   then
-    ./scp_hosts.sh
+    ./configure_hosts.sh
     echo "~~~~~~~~~~~~hosts file success coped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
     echo "~~~~~~~~~~~~scp hosts file skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -163,7 +174,6 @@ if [ "$skip_ambari" = "" ];then
     #安装ambari-server
     ./ambari_server_inst.sh $baseurl
   else
-    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
     exit 1
   fi
 fi

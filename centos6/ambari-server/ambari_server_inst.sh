@@ -14,7 +14,7 @@ yum install ambari-server -y
 /usr/bin/expect <<-EOF
 spawn ambari-server setup
 expect {
-	"(y)?" {send "\n"
+	"*\[y\/n\]*" {send "\n"
 	expect {
 	"*(n)?" { send "\n"
 	expect "*(1):" { send "3\n"
