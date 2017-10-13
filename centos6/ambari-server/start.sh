@@ -8,10 +8,10 @@ function print_usage(){
   echo "     -http_port <port>              http服务端口号，如果不填写,则该参数默认设置为: 81"
   echo "     -cluster_name <name>           集群名称，如果不填写,则该参数默认设置为: sugo_cluster"
 
-  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari "
+  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
+  echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
   echo "     -skip_http                     不安装yum源服务"
-  echo "     -skip_hosts                    不设置/etc/hosts文件中IP与hostname的映射"
   echo "     -skip_createdir                不创建元数据存储目录"
   echo "     -skip_ssh                      不安装ssh免密码"
   echo "     -skip_jdk                      不安装jdk"
@@ -24,14 +24,13 @@ ambari_ip=""
 cluster_name="sugo_cluster"
 
 skip_ambari=""
+csv=""
 hostname="skip_hostname"
 skip_http=0
-skip_hosts=0
 skip_createdir=0
 skip_ssh=0
 skip_jdk=0
 skip_cluster_services=0
-
 
 while read line
 do
@@ -52,8 +51,8 @@ while [[ $# -gt 0 ]]; do
        -http_port) http_port=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
        -skip_ambari) skip_ambari=1 && shift ;;
+       -csv) csv=1 && shift ;;
        -skip_http) skip_http=1 && shift ;;
-       -skip_hosts) skip_hosts=1 && shift ;;
        -skip_createdir) skip_createdir=1 && shift ;;
        -skip_ssh) skip_ssh=1 && shift ;;
        -skip_jdk) skip_jdk=1 && shift ;;
@@ -61,22 +60,18 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-if [ "$http_port" -eq 0 ]
-  then
+if [ "$http_port" -eq 0 ]; then
     echo "-http_port is required!"
     exit 1
 fi
 
-if [ "$ambari_ip" = "" ]
-  then
+if [ "$ambari_ip" = "" ]; then
     echo "-ambari_ip is required!"
     exit 1
 fi
 
-if [ $skip_cluster_services -eq 0 ]
-  then
-    if [ "$cluster_name" = "" ]
-      then
+if [ $skip_cluster_services -eq 0 ]; then
+    if [ "$cluster_name" = "" ]; then
         echo "-cluster_name is required!"
         exit 1
     fi
@@ -86,7 +81,7 @@ fi
 if [ "$skip_ambari" = "" ];then
   ambari_server_dir="/var/lib/ambari-server"
   if [ -d "$ambari_server_dir" ];then
-    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先remove掉ambari-server并彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
+    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需>重复安装，请加上参数: -skip_ambari "
     exit 1
   fi
 fi
@@ -115,9 +110,9 @@ baseurl=http://$ambari_ip:$http_port/sugo_yum
 echo "~~~~~~~~~~~~directory created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #分发hosts文件
-if [ $skip_hosts -eq 0 ]
+if [ $skip_ssh -eq 0 ]
   then
-    ./configure_hosts.sh
+    ./scp_hosts.sh
     echo "~~~~~~~~~~~~hosts file success coped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
     echo "~~~~~~~~~~~~scp hosts file skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -173,10 +168,20 @@ if [ "$skip_ambari" = "" ];then
   if [ ! -d "$ambari_server_dir" ];then
     #安装ambari-server
     ./ambari_server_inst.sh $baseurl
-  else
-    exit 1
   fi
 fi
+
+#判断是通过csv格式自定义服务安装的位置还是按照默认安装服务
+rm -rf ../service/host_*
+cd ../conf/
+if [ "$csv" = "" ];then
+  cp host_* ../service/
+else
+  python csv_json.py hosts.csv
+  cp hostbeforhdfs.json ../service/host_until_hdfs.json 
+  cp hostafterhdfs.json ../service/host_after_hdfs.json
+fi
+cd -  
 
 #创建集群并安装服务
 if [ $skip_cluster_services -eq 0 ]
@@ -185,6 +190,10 @@ if [ $skip_cluster_services -eq 0 ]
     cd ../service
     echo `pwd`
     echo "http_port:$http_port, server_ip:$ambari_ip, cluster_name:$cluster_name, serverpassword:$server_password, baseurl:$baseurl"
-    source install.sh -http_port $http_port -server_IP $ambari_ip -cluster_name $cluster_name -server_password $server_password
+    if [ "$csv" = "" ];then
+        source install.sh -http_port $http_port -server_IP $ambari_ip -cluster_name $cluster_name -server_password $server_password
+    else
+        source install.sh -http_port $http_port -server_IP $ambari_ip -cluster_name $cluster_name -server_password $server_password -csv
+    fi
     cd -
 fi

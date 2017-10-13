@@ -14,13 +14,15 @@ yum install ambari-server -y
 /usr/bin/expect <<-EOF
 spawn ambari-server setup
 expect {
-	"*\[y\/n\]*" { send "\n"
+	"\[y\/n\]*" {send "\n"
+	expect {
+	"*(n)?" { send "\n"
 	expect "*(1):" { send "3\n"
 	expect "JAVA_HOME:" {send "/usr/local/jdk18\n"
 	expect "*(n)?" { send "\n" }}
 	}
 	expect "*(n)?" { send "/n"
-	expect "*(n)?" { send "/n" }}}
+	expect "*(n)?" { send "/n" }}}}}
 	}
         expect "*]#*"
 EOF

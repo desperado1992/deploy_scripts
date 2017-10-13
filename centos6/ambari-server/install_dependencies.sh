@@ -1,6 +1,13 @@
 #!/bin/bash
 
+if [ -f host_old ];then
+  cat host_old | while read line;do
+    sed -i "s/$line/""/g" /etc/hosts
+  done
+  rm -rf host_old
+fi
 cat host >> /etc/hosts
+cp host host_old
 
 cat ip.txt |while read line;
 do

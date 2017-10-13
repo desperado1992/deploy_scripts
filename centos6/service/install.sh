@@ -8,7 +8,7 @@ function print_usage(){
   echo "     -server_IP <server_IP>         ambari-server所在主机的IP"
   echo "     -cluster_name <name>           集群名称"
   echo "     -server_password <server_password>    ambari-server所在主机的root用户密码"
-
+  echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
 }
 
 #cd `dirname $0`
@@ -16,7 +16,7 @@ http_port=80
 server_IP=""
 cluster_name=""
 server_password=""
-
+csv=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -25,11 +25,24 @@ while [[ $# -gt 0 ]]; do
        -server_IP) server_IP=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
        -server_password) server_password=$2 && shift 2;;
+       -csv) csv=1 && shift ;;
     esac
 done
 
+#根据../ambari-server/host文件内的行数判断journalnode_stat的值
+journalnode_stat=""
+i=0
+n=`cat ../ambari-server/host | wc -l`
+while true;do
+  if [ $i -lt $n ];then
+    journalnode_stat=$journalnode_stat"STARTED"
+	i=$[$i+1]
+	continue
+  else
+    break
+  fi
+done
 
-journalnode_stat="STARTEDSTARTEDSTARTED"
 baseurl=http://$server_IP:$http_port/sugo_yum
 
 #pw=`cat ../ambari-server/ip.txt | sed -n "1p" |awk '{print $2}'`
@@ -85,24 +98,45 @@ rm -rf host1 host2
 cd -
 #sort ../ambari-server/host > ../ambari-agent/host
 
-namenode1=`cat ../ambari-agent/host | sed -n "1p" |awk '{print $2}'`
-namenode2=`cat ../ambari-agent/host | sed -n "2p" |awk '{print $2}'`
-datanode1=`cat ../ambari-agent/host | sed -n "3p" |awk '{print $2}'`
+if [ "$csv" = "" ];then
+  cluster_host1=`cat ../ambari-agent/host | sed -n "1p" |awk '{print $2}'`
+  cluster_host2=`cat ../ambari-agent/host | sed -n "2p" |awk '{print $2}'`
+  cluster_host3=`cat ../ambari-agent/host | sed -n "3p" |awk '{print $2}'`
 
-sed -i "s/test1.sugo.vm/${namenode1}/g" host_until_hdfs.json
-sed -i "s/test2.sugo.vm/${namenode2}/g" host_until_hdfs.json
-sed -i "s/test3.sugo.vm/${datanode1}/g" host_until_hdfs.json
+  sed -i "s/test1.sugo.vm/${cluster_host1}/g" host_until_hdfs.json
+  sed -i "s/test2.sugo.vm/${cluster_host2}/g" host_until_hdfs.json
+  sed -i "s/test3.sugo.vm/${cluster_host3}/g" host_until_hdfs.json
 
-sed -i "s/test1.sugo.vm/${namenode1}/g" host_after_hdfs.json
-sed -i "s/test2.sugo.vm/${namenode2}/g" host_after_hdfs.json
-sed -i "s/test3.sugo.vm/${datanode1}/g" host_after_hdfs.json
+  sed -i "s/test1.sugo.vm/${cluster_host1}/g" host_after_hdfs.json
+  sed -i "s/test2.sugo.vm/${cluster_host2}/g" host_after_hdfs.json
+  sed -i "s/test3.sugo.vm/${cluster_host3}/g" host_after_hdfs.json
 
-sed -i "s/test1.sugo.vm/${namenode1}/g" host_hdfs.json
-sed -i "s/test2.sugo.vm/${namenode2}/g" host_hdfs.json
-sed -i "s/test3.sugo.vm/${datanode1}/g" host_hdfs.json
+  sed -i "s/test1.sugo.vm/${cluster_host1}/g" host_hdfs.json
+  sed -i "s/test2.sugo.vm/${cluster_host2}/g" host_hdfs.json
+  sed -i "s/test3.sugo.vm/${cluster_host3}/g" host_hdfs.json
+fi
 
-sed -i "s/test1.sugo.vm/${namenode1}/g" changed_configuration/astro-site.xml
-sed -i "s/test1.sugo.vm/${namenode1}/g" changed_configuration/common.runtime.xml
+#获取namenode及astro所在主机并替换astro和druid的配置项
+cd ../service/
+rm -rf namenode_astro_host.txt
+python get_host.py host_until_hdfs.json namenode_astro_host.txt
+python get_host.py host_after_hdfs.json namenode_astro_host.txt
+
+namenode1=`cat namenode_astro_host.txt | grep "namenode1" | awk '{print $2}'`
+namenode2=`cat namenode_astro_host.txt | grep "namenode2" | awk '{print $2}'`
+astro_host=`cat namenode_astro_host.txt | grep "astro_host" | awk '{print $2}'`
+redis_host=`cat namenode_astro_host.txt | grep "redis_host" | awk '{print $2}'`
+postgres_host=`cat namenode_astro_host.txt | grep "postgres_host" | awk '{print $2}'`
+gateway_host=`cat namenode_astro_host.txt | grep "gateway_host" | awk '{print $2}'`
+
+rm -rf changed_configuration
+cp -r changed_configurations changed_configuration
+sed -i "s/test1.sugo.vm/${astro_host}/g" changed_configuration/astro-site.xml
+sed -i "s/test2.sugo.vm/${gateway_host}/g" changed_configuration/astro-site.xml
+sed -i "s/test3.sugo.vm/${postgres_host}/g" changed_configuration/astro-site.xml
+sed -i "s/test4.sugo.vm/${redis_host}/g" changed_configuration/astro-site.xml
+sed -i "s/test1.sugo.vm/${postgres_host}/g" changed_configuration/common.runtime.xml
+cd -
 
 #判断httpd服务是否已启动
 http_service=`netstat -ntlp | grep $http_port | grep httpd`
@@ -114,13 +148,20 @@ fi
 #判断ambari-server是否已经启动，如果没有，则等待启动完成
 ambari=`netstat -ntlp | grep 8080`
 printf "waiting for ambari-server to start"
+x=0
 while [ "$ambari" = "" ]
 do
   ambari=`netstat -ntlp | grep 8080`
   if [ "$ambari" = "" ];then
-    printf "."
     sleep 1
-    continue
+    x=$[$x+1]
+    if [ $x -lt 30 ];then
+        printf "."
+        continue
+    else
+        echo "\nThe installation of Ambari-server failed, please check the configurations and run start.sh again!"
+        exit 1
+    fi
   else
     break
   fi
@@ -141,13 +182,20 @@ sleep 15
   #判断hdfs是否已经安装，如果没有则等待安装完成
   hdfs_dir="/opt/apps/hadoop_sugo"
   printf "waiting for hdfs to be installed" 
+  y=0
   while [ ! -d "$hdfs_dir" ]
   do
     hdfs_dir="/opt/apps/hadoop_sugo"
     if [ ! -d "$hdfs_dir" ];then
-      printf "."
       sleep 2
-      continue
+    y=$[$y+1]
+    if [ $y -lt 45 ];then
+        printf "."
+        continue
+    else
+        echo "\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
+        exit 1
+    fi
     else
       break
     fi
@@ -161,6 +209,7 @@ sleep 15
  
   #判断所有journalnode是否都已经启动
   printf "waiting for journalnode to start"
+  z=0
   while true;do
   curl -u admin:admin -H "X-Requested-By: ambari" -X GET "http://$server_IP:8080/api/v1/clusters/$cluster_name/components/?ServiceComponentInfo/category=SLAVE&fields=ServiceComponentInfo/service_name,host_components/HostRoles/display_name,host_components/HostRoles/host_name,host_components/HostRoles/state,host_components/HostRoles/maintenance_state,host_components/HostRoles/stale_configs,host_components/HostRoles/ha_state,host_components/HostRoles/desired_admin_state,&minimal_response=true&_=1499937079425" > slave.json
   python slave.py slave.json > slave.txt
@@ -173,8 +222,14 @@ sleep 15
       break
     else
       sleep 3
-      printf "."
-      continue
+      z=$[$z+1]
+      if [ $z -lt 30 ];then
+        printf "."
+        continue
+      else
+        echo "\nThe start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
+        exit 1
+      fi
     fi
   done
   echo "hdfs format finished~~~"
@@ -186,7 +241,7 @@ sleep 10
 #判断astro是否已经安装完成
 /usr/bin/expect <<-EOF
 set timeout 100000
-spawn ssh $namenode1
+spawn ssh $astro_host
                 expect "*]#*"
           send "wget $baseurl/deploy_scripts/centos6/service/pg_db_astro.sh\n"
                 expect "*]#*"
@@ -197,20 +252,6 @@ spawn ssh $namenode1
           send "rm -rf pg_db_astro.sh\n"
                 expect "*]#*"
 EOF
-#  astro_dir="/opt/apps/astro_sugo"
-#  while [ ! -d "$astro_dir" ]
-#  do
-#    astro_dir="/opt/apps/astro_sugo"
-#    if [ ! -d "$astro_dir" ];then
-#      echo "waiting for astro to be installed~~~"
-#      sleep 2
-#      continue
-#    else
-#      break
-#    fi
-#  done
 
-
-
- #启动所有服务
+ #启剩余所有服务
 python start_service.py $server_IP $cluster_name host_after_hdfs.json

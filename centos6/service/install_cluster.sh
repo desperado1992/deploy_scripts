@@ -28,14 +28,21 @@ python install_agent.py $cluster_name $server_IP "host"
 
 #判断agent是否已经安装完成并启动
 yum install -y lsof
-printf "waiting for agent to start"
+printf "waiting for ambari-agent to start"
+x=0
 while true;do
 res=`lsof -n -i:8441 | grep $server_IP |awk '{print $9}' | wc -l`
 num_host=`cat ../ambari-agent/host | wc -l`
   if [ $res != $[$num_host + 1] ];then
-    printf "."
-    sleep 1
-    continue
+    sleep 2
+    x=$[$x+1]
+    if [ $x -lt 15 ];then
+        printf "."
+        continue
+    else
+        echo "The start of ambari-agent failed, please cancel the start.sh and check the configurations ,run start.sh again!"
+        continue
+    fi
   else
     break
   fi

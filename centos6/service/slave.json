@@ -11,7 +11,7 @@
             "component_name" : "METRICS_MONITOR",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "Metrics Monitor",
-            "host_name" : "test1.sugo.vm",
+            "host_name" : "test01.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -22,7 +22,7 @@
             "component_name" : "METRICS_MONITOR",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "Metrics Monitor",
-            "host_name" : "test2.sugo.vm",
+            "host_name" : "test02.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -33,7 +33,7 @@
             "component_name" : "METRICS_MONITOR",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "Metrics Monitor",
-            "host_name" : "test3.sugo.vm",
+            "host_name" : "test03.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -52,7 +52,7 @@
             "component_name" : "SUGO_DATANODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "DataNode",
-            "host_name" : "test1.sugo.vm",
+            "host_name" : "test01.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -63,7 +63,7 @@
             "component_name" : "SUGO_DATANODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "DataNode",
-            "host_name" : "test2.sugo.vm",
+            "host_name" : "test02.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -74,7 +74,7 @@
             "component_name" : "SUGO_DATANODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "DataNode",
-            "host_name" : "test3.sugo.vm",
+            "host_name" : "test03.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -93,7 +93,7 @@
             "component_name" : "SUGO_JOURNALNODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "JournalNode",
-            "host_name" : "test1.sugo.vm",
+            "host_name" : "test01.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -104,7 +104,7 @@
             "component_name" : "SUGO_JOURNALNODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "JournalNode",
-            "host_name" : "test2.sugo.vm",
+            "host_name" : "test02.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -115,7 +115,7 @@
             "component_name" : "SUGO_JOURNALNODE",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "JournalNode",
-            "host_name" : "test3.sugo.vm",
+            "host_name" : "test03.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTED"
@@ -134,7 +134,7 @@
             "component_name" : "SUGO_ZKFC",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "ZKFailoverController",
-            "host_name" : "test1.sugo.vm",
+            "host_name" : "test01.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTING"
@@ -145,7 +145,7 @@
             "component_name" : "SUGO_ZKFC",
             "desired_admin_state" : "INSERVICE",
             "display_name" : "ZKFailoverController",
-            "host_name" : "test2.sugo.vm",
+            "host_name" : "test02.sugo.vm",
             "maintenance_state" : "OFF",
             "stale_configs" : false,
             "state" : "STARTING"

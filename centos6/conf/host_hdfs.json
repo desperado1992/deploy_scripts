@@ -1,0 +1,29 @@
+[
+   {
+    "HDFS_SUGO": {
+      "SUGO_NAMENODE": [
+        "test1.sugo.vm",
+        "test2.sugo.vm"
+      ],
+      "SUGO_DATANODE": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ],
+      "SUGO_HDFS_CLIENT": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ],
+      "SUGO_JOURNALNODE": [
+        "test1.sugo.vm",
+        "test2.sugo.vm",
+        "test3.sugo.vm"
+      ],
+      "SUGO_ZKFC": [
+        "test1.sugo.vm",
+        "test2.sugo.vm"
+      ]
+    }
+  }
+]

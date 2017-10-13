@@ -20,14 +20,21 @@ fi
 
 #判断astro是否已经安装完成
   printf "waiting for astro to be installed"
+  x=0
   astro_dir="/opt/apps/astro_sugo"
   while [ ! -d "$astro_dir" ]
   do
     astro_dir="/opt/apps/astro_sugo"
     if [ ! -d "$astro_dir" ];then
-      printf "."
       sleep 2
-      continue
+      x=$[$x+1]
+      if [ $x -lt 60 ];then
+        printf "."
+        continue
+      else
+        echo "The installation of ASTRO failed, you can check it on http://$ambari_server:8080, or cancel the start.sh and check the configurations, run start.sh again!"
+        continue
+      fi
     else
       echo "astro has been installed!~~~"
       break
