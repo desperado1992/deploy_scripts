@@ -159,7 +159,7 @@ do
         printf "."
         continue
     else
-        echo "\nThe installation of Ambari-server failed, please check the configurations and run start.sh again!"
+        echo "The installation of Ambari-server failed, please check the configurations and run start.sh again!"
         exit 1
     fi
   else
@@ -189,11 +189,11 @@ sleep 15
     if [ ! -d "$hdfs_dir" ];then
       sleep 2
     y=$[$y+1]
-    if [ $y -lt 45 ];then
+    if [ $y -lt 90 ];then
         printf "."
         continue
     else
-        echo "\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
+        echo "The installation of HDFS failed, please check the configurations and run start.sh again!"
         exit 1
     fi
     else
@@ -227,7 +227,7 @@ sleep 15
         printf "."
         continue
       else
-        echo "\nThe start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
+        echo "The start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
         exit 1
       fi
     fi

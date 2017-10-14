@@ -12,18 +12,15 @@ sed -i "s/yum/sugo_yum/g" ambari.repo
 yum install ambari-server -y
 
 /usr/bin/expect <<-EOF
+set timeout 3000 
 spawn ambari-server setup
 expect {
-	"\[y\/n\]*" {send "\n"
-	expect {
-	"*(n)?" { send "\n"
-	expect "*(1):" { send "3\n"
-	expect "JAVA_HOME:" {send "/usr/local/jdk18\n"
-	expect "*(n)?" { send "\n" }}
-	}
-	expect "*(n)?" { send "/n"
-	expect "*(n)?" { send "/n" }}}}}
-	}
+        "*(n)?" {send "\n"
+        expect {
+        "*(1):" { send "3\n"
+        expect "JAVA_HOME:" {send "/usr/local/jdk18\n"
+        expect "*(n)?" { send "\n" }}
+        }}}}
         expect "*]#*"
 EOF
 
