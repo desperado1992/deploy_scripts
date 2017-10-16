@@ -189,7 +189,7 @@ sleep 15
     if [ ! -d "$hdfs_dir" ];then
       sleep 2
     y=$[$y+1]
-    if [ $y -lt 90 ];then
+    if [ $y -lt 150 ];then
         printf "."
         continue
     else
