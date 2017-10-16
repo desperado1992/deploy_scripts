@@ -223,7 +223,7 @@ sleep 15
     else
       sleep 3
       z=$[$z+1]
-      if [ $z -lt 30 ];then
+      if [ $z -lt 40 ];then
         printf "."
         continue
       else
