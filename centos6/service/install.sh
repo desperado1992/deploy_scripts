@@ -159,7 +159,7 @@ do
         printf "."
         continue
     else
-        echo "The installation of Ambari-server failed, please check the configurations and run start.sh again!"
+        echo -e "\n==========Timeout==========\nThe installation of Ambari-server failed, please check the configurations and run start.sh again!"
         exit 1
     fi
   else
@@ -193,7 +193,7 @@ sleep 15
         printf "."
         continue
     else
-        echo "The installation of HDFS failed, please check the configurations and run start.sh again!"
+        echo -e "\n==========Timeout==========\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
         exit 1
     fi
     else
@@ -227,7 +227,7 @@ sleep 15
         printf "."
         continue
       else
-        echo "The start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
+        echo -e "\n==========Timeout==========\nThe start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
         exit 1
       fi
     fi

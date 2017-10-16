@@ -40,7 +40,7 @@ num_host=`cat ../ambari-agent/host | wc -l`
         printf "."
         continue
     else
-        echo "The start of ambari-agent failed, please cancel the start.sh and check the configurations ,run start.sh again!"
+        echo -e "\n==========Timeout==========\nThe start of ambari-agent failed, please cancel the start.sh and check the configurations ,run start.sh again!"
         continue
     fi
   else

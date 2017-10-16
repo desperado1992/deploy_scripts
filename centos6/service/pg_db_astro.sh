@@ -32,7 +32,7 @@ fi
         printf "."
         continue
       else
-        echo "The installation of ASTRO failed, you can check it on http://$ambari_server:8080, or cancel the start.sh and check the configurations, run start.sh again!"
+        echo -e "\n==========Timeout==========\nThe installation of ASTRO failed, you can check it on http://$ambari_server:8080, or cancel the start.sh and check the configurations, run start.sh again!"
         continue
       fi
     else
