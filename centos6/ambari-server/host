@@ -1,3 +1,3 @@
-#added by sugo
-192.168.220.130 test1.sugo.vm
-192.168.220.131 test2.sugo.vm
+192.168.0.120 test1.sugo.vm
+192.168.0.121 test2.sugo.vm
+192.168.0.122 test3.sugo.vm

@@ -11,7 +11,9 @@ cat $conf_file | while read line;
 do
 hn=`echo $line|awk '{print $1}'`
 pw=`echo $line|awk '{print $2}'`
+local_hn=`hostname`
 
+if [ "$hn" != "$local_hn" ];then
 /usr/bin/expect <<-EOF
 set timeout 100000
 spawn ssh $hn
@@ -37,4 +39,5 @@ spawn ssh $hn
         send "rm -rf jdk.sh\n"
                 expect "*]#*"
 EOF
+fi
 done

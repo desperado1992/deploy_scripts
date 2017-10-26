@@ -5,6 +5,7 @@ conf_dir=$2
 init_url=$baseurl/deploy_scripts/centos6/ambari-server
 
 #在ambari-server节点配置ssh
+rm -rf /root/.ssh
 ./ssh.sh $baseurl
 
 #将/root/.ssh/id_rsa.pub放到yum源目录下的SG/Centos6/1.0/:
@@ -17,7 +18,9 @@ cat $conf_dir |while read line;
 do
 hn=`echo $line|awk '{print $1}'`
 pw=`echo $line|awk '{print $2}'`
+local_hn=`hostname`
 
+if [ "$hn" != "$local_hn" ];then
 /usr/bin/expect <<-EOF
 set timeout 100000
 spawn ssh $hn
@@ -37,4 +40,5 @@ spawn ssh $hn
         send "rm -rf ssh.sh*\n"
                 expect "*]#*"
 EOF
+fi
 done
