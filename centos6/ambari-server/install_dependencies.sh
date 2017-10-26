@@ -6,6 +6,19 @@ if [ -f host_old ];then
   done
   rm -rf host_old
 fi
+
+cat host | while read line; do
+  ipaddr=`echo $line|awk '{print $1}'`
+  hns=`echo $line|awk '{print $2}'`
+  cat /etc/hosts | while read line; do
+    ipaddr_host=`echo $line|awk '{print $1}'`
+    hns_host=`echo $line|awk '{print $2}'`
+    if [ "$ipaddr" = "$ipaddr_host" ] || [ "$hns" = "$hns_host" ];then
+      sed -i "s/$line//g" /etc/hosts
+    fi
+  done
+done
+
 cat host >> /etc/hosts
 cp host host_old
 
