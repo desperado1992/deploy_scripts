@@ -56,22 +56,21 @@ host文件为各主机ip与hostname的映射，ip.txt文件为ambari-server所�
 启动启动脚本进行安装
 
 ```
-vi {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst/host  
+cd {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari-server
+vi host
 	192.168.10.1 test01.sugo.vm
 		...
-vi {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst/ip.txt
+vi ip.txt
 	test02.sugo.vm 123456
 	test03.sugo.vm 123456  
 		...
 
-chmod -R 750 deploy_scripts
-cd {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst
 ```
 
 start.sh脚本的具体使用方法可通过./start -help查看
 例：
 ```
-./start.sh -http_port 81 -ambari_ip 192.168.10.150 -hostname skip_hostname
+./start.sh -ambari_ip 192.168.10.150 -skip_cluster_services
 ```
 
 如果没有报错信息，则基本表明Ambari-server安装成功， Web UI默认端口8080，后面的应用（services）可通过脚本或界面进行安装
