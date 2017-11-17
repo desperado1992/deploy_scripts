@@ -155,7 +155,7 @@ do
   if [ "$ambari" = "" ];then
     sleep 1
     x=$[$x+1]
-    if [ $x -lt 30 ];then
+    if [ $x -lt 60 ];then
         printf "."
         continue
     else
@@ -189,7 +189,7 @@ sleep 15
     if [ ! -d "$hdfs_dir" ];then
       sleep 2
     y=$[$y+1]
-    if [ $y -lt 150 ];then
+    if [ $y -lt 180 ];then
         printf "."
         continue
     else
@@ -223,7 +223,7 @@ sleep 15
     else
       sleep 3
       z=$[$z+1]
-      if [ $z -lt 40 ];then
+      if [ $z -lt 100 ];then
         printf "."
         continue
       else
