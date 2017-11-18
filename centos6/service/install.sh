@@ -221,9 +221,9 @@ sleep 15
       ./hdfsformat.sh $server_password $server_IP $cluster_name
       break
     else
-      sleep 3
+      sleep 5
       z=$[$z+1]
-      if [ $z -lt 100 ];then
+      if [ $z -lt 60 ];then
         printf "."
         continue
       else
