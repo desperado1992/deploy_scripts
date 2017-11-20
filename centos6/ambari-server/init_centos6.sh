@@ -66,7 +66,7 @@ swapoff -a
 res=`grep 'vm.max_map_count' /etc/sysctl.conf`
 if [ "$res" = "" ]
    then
-     echo "vm.max_map_count=6553600" >> /etc/sysctl.conf
+     echo "vm.max_map_count=131060" >> /etc/sysctl.conf
 fi
 
 sysctl -p
