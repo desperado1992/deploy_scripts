@@ -56,22 +56,21 @@ host文件为各主机ip与hostname的映射，ip.txt文件为ambari-server所�
 启动启动脚本进行安装
 
 ```
-vi {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst/host  
+cd {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari-server
+vi host
 	192.168.10.1 test01.sugo.vm
 		...
-vi {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst/ip.txt
+vi ip.txt
 	test02.sugo.vm 123456
 	test03.sugo.vm 123456  
 		...
 
-chmod -R 750 deploy_scripts
-cd {yum源存放目录}/sugo_yum/deploy_scripts/centos6/ambari_server_inst
 ```
 
 start.sh脚本的具体使用方法可通过./start -help查看
 例：
 ```
-./start.sh -http_port 81 -ambari_ip 192.168.10.150 -hostname skip_hostname
+./start.sh -ambari_ip 192.168.10.150 -skip_cluster_services
 ```
 
 如果没有报错信息，则基本表明Ambari-server安装成功， Web UI默认端口8080，后面的应用（services）可通过脚本或界面进行安装
@@ -186,24 +185,43 @@ hdfs dfs -chown -R druid:druid /druid
 hdfs dfs -mkdir -p /user/druid
 hdfs dfs -chown -R druid:druid /user/druid
 
+hdfs dfs -mkdir -p /tmp/spark-events
+hdfs dfs -chmod 777 /tmp/spark-events
+hdfs dfs -mkdir -p /user/spark
+hdfs dfs -chmod 777 /user/spark
+hdfs dfs -chown -R spark:spark /user/spark
+
+hdfs dfs -mkdir -p /tmp/hive
+hdfs dfs -chmod 777 /tmp/hive
+hdfs dfs -chown -R hive:hadoop /tmp/hive
+hdfs dfs -mkdir -p /user/hive
+hdfs dfs -chmod 777 /user/hive
+hdfs dfs -chown -R hive:hadoop /user/hive
+
 ```
 ######  5. YARN
 ######  6. MapReduce
-######  7. Druid启动
-Druid和Astro等服务依赖Postgres数据库，需在Postgres安装节点分别创建druid数据库和sugo_astro数据库，注意postgres的端口号及用户
+######  7. Kafka
+######  8. Gateway
+######  9. Druid启动
+Druid和Astro等服务依赖Postgres数据库，需在Postgres安装节点分别创建druid数据库和sugo_astro数据库，注意postgres的端口号及用户(pio库和hive库是为可能安装pio或hive准备的)
 ```
 cd /opt/apps/postgres_sugo
 bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE druid WITH OWNER = postgres ENCODING = UTF8;"
 bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE sugo_astro WITH OWNER = postgres ENCODING = UTF8;"
 bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE pio WITH OWNER = postgres ENCODING = UTF8;"
+bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE hive WITH OWNER = postgres ENCODING = UTF8;"
 bin/psql -p 15432 -U postgres -d postgres -c "select datname from pg_database"
 ```
 启动Druid
-######  8.Astro
-######  9.Kafka
-######  10.OpenResty
-    
-    
+######  10. Astro
+######  11. Spark(可选,需要上传安装包)
+######  12. Hive(可选,需要上传安装包)
+修改配置项javax.jdo.option.ConnectionURL的值为：jdbc:postgresql://ds1.sugo.io:15432/hive?createDatabaseIfNotExist=true
+重启hive的所有服务
+######  13. Pio(可选,需要上传安装包)
+安装python2.7运行环境:
+下载python2.7环境安装包anaconda2.7，解压缩到目录/usr/local/下
     
     
 ### 3.2 Web安装
@@ -240,7 +258,7 @@ hadoop.tmp.dir
 
 ###### c 安装：  
 此处的HDFS为HA模式，有两个NameNode，假设NN1为Active Namenode，NN2为Standby Namenode。
- 
+
 正常情况下会报错ZKFailoverController(zkfc)启动失败，不报错表示已经安装过HDFS，跳过失败，点击下一步，按照以下顺序操作：  
 
 1) 在NN1节点执行：  
@@ -355,19 +373,8 @@ bin/psql -p 15432 -U postgres -d postgres -c "CREATE DATABASE sugo_astro WITH OW
 bin/psql -p 15432 -U postgres -d postgres -c "select datname from pg_database"
 ```
 
-下载、解压缩user-group-1.0.tgz并启动  （此步骤可省略 ）
-```
-wget -P /opt/apps/ http://192.168.10.142/sugo_yum/SG/centos6/1.0/user-group-1.0.tgz
-tar -zxvf user-group-1.0.tgz
-cd user-group-1.0
-./start.sh  
-```
-查看端口情况：
-```
-netstat -nap | grep 2626
-``` 
 
-建议修改参数（视频上安装user_group可以不安装）：  
+建议修改参数：
 ```
 postgres.host: test01.sugo.vm
 dataConfig.hostAndPorts: test01.sugo.vm:6379
@@ -381,7 +388,7 @@ site.websdk_decide_host: test01.sugo.vm:8000
 site.collectGateway: http://test01.sugo.vm
 ```
 
-#### 3.2.10 安装Openresty
+#### 3.2.10 安装Openresty(可选，需要上传安装包)
 环境要求：  
 redis(可通过界面安装)  
 注意：如果前面httpd服务的端口号没有修改，则会与nginx的端口产生冲突  
@@ -394,9 +401,39 @@ redis_host:
 自定义参数（此参数在使用非sugo提供的kafka时添加，使用sugo安装kafka时不需要添加）：  
 kafka.brokers: 192.168.1.122:59092,192.168.1.126:59092,192.168.1.240:59092（例）
 
+####  3.2.11 Spark(可选,需要上传安装包)
+hdfs目录创建：
+```
+su hdfs
+hdfs dfs -mkdir -p /tmp/spark-events
+hdfs dfs -chmod 777 /tmp/spark-events
+hdfs dfs -mkdir -p /user/spark
+hdfs dfs -chmod 777 /user/spark
+hdfs dfs -chown -R spark:spark /user/spark
+```
+####  3.2.12 Hive(可选,需要上传安装包)
+修改配置项javax.jdo.option.ConnectionURL的值为：jdbc:postgresql://test1.sugo.vm:15432/hive?createDatabaseIfNotExist=true
+重启hive的所有服务
+
+hdfs目录创建：
+```
+su hdfs
+hdfs dfs -mkdir -p /tmp/hive
+hdfs dfs -chmod 777 /tmp/hive
+hdfs dfs -chown -R hive:hadoop /tmp/hive
+hdfs dfs -mkdir -p /user/hive
+hdfs dfs -chmod 777 /user/hive
+hdfs dfs -chown -R hive:hadoop /user/hive
+```
+
+####  3.2.13 Pio(可选,需要上传安装包)
+安装python2.7运行环境:
+下载python2.7环境安装包，解压缩到目录/usr/local/下
+
+
 ## 4 验证安装是否成功
 至此，服务安装完成，查看Web界面、导入数据验证安装成功，具体可查看视频  
 查看的服务：  
 HDFS（包括activeNamenode，standbyNamenode）  
 DruidIO  
-Astro（admin:admin123456,创建项目、导入数据、采集数据）
+Astro（admin:admin123456,创建项目、导入数据、采集数据、查询数据）
