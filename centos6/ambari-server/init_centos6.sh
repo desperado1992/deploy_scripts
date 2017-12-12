@@ -31,7 +31,7 @@ if [ "$res" = "" ]
 fi 
 
 
-##¹Ø±ÕTHP
+##å…³é—­THP
 echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
 echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag
 
@@ -47,15 +47,15 @@ if [ "$res" = "" ]
      echo "echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag" >> /etc/rc.local
 fi
 
-#¹Ø±Õ·À»ðÇ½
+#å…³é—­é˜²ç«å¢™
 service iptables stop 
 chkconfig iptables off 
 
-#¹Ø±Õselinux
+#å…³é—­selinux
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-#×î´óÏÞ¶ÈÊ¹ÓÃÎïÀíÄÚ´æ
+#æœ€å¤§é™åº¦ä½¿ç”¨ç‰©ç†å†…å­˜
 res=`grep 'vm.swappiness' /etc/sysctl.conf`
 if [ "$res" = "" ]
    then
@@ -66,7 +66,7 @@ swapoff -a
 res=`grep 'vm.max_map_count' /etc/sysctl.conf`
 if [ "$res" = "" ]
    then
-     echo "vm.max_map_count=131060" >> /etc/sysctl.conf
+     echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 fi
 
 sysctl -p
