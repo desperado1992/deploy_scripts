@@ -25,7 +25,7 @@
     </property>
     <property require-input="true">
         <name>activeExtendModules</name>
-        <value>sugo-analytics-extend-saas-cluster</value>
+        <value>sugo-analytics-extend-standard</value>
         <description></description>
     </property>
 </configuration>
