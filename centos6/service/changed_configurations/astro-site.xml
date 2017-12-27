@@ -58,5 +58,10 @@
         <value>听云</value>
         <description></description>
     </property>
+    <property require-input="true">
+        <name>site.docUrl</name>
+        <value>#</value>
+        <description></description>
+    </property>
 </configuration>
 
