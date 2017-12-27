@@ -59,17 +59,17 @@ else
 		"*assword:" { send "$pw\n" } 
 		"*]#*" { send "mkdir -p $data_dir/data1 $data_dir/data2\n" }
 			expect "*]#*" 
-		send "ln -s $data_dir/data1 /data1\n" 
+		send "ln -s $data_dir/data1 /\n" 
 			expect "*]#*" 
-		send "ln -s $data_dir/data2 /data2\n"
+		send "ln -s $data_dir/data2 /\n"
 			expect "*]#*"
 		}
 			expect "*]#*" 
 		send "mkdir -p $data_dir/data1 $data_dir/data2\n"
 			expect "*]#*" 
-		send "ln -s $data_dir/data1 /data1\n"
+		send "ln -s $data_dir/data1 /\n"
 			expect "*]#*" 
-		send "ln -s $data_dir/data2 /data2\n"
+		send "ln -s $data_dir/data2 /\n"
 			expect "*]#*"
 	EOF
         fi
