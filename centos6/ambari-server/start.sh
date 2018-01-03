@@ -81,7 +81,7 @@ fi
 if [ "$skip_ambari" = "" ];then
   ambari_server_dir="/var/lib/ambari-server"
   if [ -d "$ambari_server_dir" ];then
-    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需>重复安装，请加上参数: -skip_ambari "
+    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
     exit 1
   fi
 fi

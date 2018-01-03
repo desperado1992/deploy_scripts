@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+#ambari-server主机安装相关软件及http服务
+yum install -y wget ntp openssh-clients expect
+
+#关闭防火墙和seLinux
+service iptables stop
+chkconfig iptables off
+setenforce 0
+
 if [ -f host_old ];then
   cat host_old | while read line;do
     sed -i "s/$line/""/g" /etc/hosts

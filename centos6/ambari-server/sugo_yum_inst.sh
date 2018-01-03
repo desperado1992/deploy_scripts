@@ -4,12 +4,7 @@
 http_port=$1
 
 #ambari-server主机安装相关软件及http服务
-yum install -y wget ntp openssh-clients expect httpd
-
-#关闭防火墙和seLinux
-service iptables stop
-chkconfig iptables off
-setenforce 0
+yum install -y httpd
 
 http_server=`ps -ef | grep httpd | grep -v "grep httpd"`
 if [ "$http_server" = "" ];then
