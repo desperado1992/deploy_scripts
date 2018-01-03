@@ -3,16 +3,16 @@
 function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
-  echo "     -help                          帮助文档"
-  echo "     -http_port <port>              http服务端口号"
-  echo "     -server_IP <server_IP>         ambari-server所在主机的IP"
-  echo "     -cluster_name <name>           集群名称"
-  echo "     -server_password <server_password>    ambari-server所在主机的root用户密码"
-  echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
+  echo "     -help                          Documentation"
+  echo "     -http_port <port>              Http port"
+  echo "     -server_IP <server_IP>         The IP of Ambari-Server"
+  echo "     -cluster_name <name>           The name of cluster"
+  echo "     -server_password <server_password>    The password of root on ambari-server"
+  echo "     -csv                           Choose the hosts that the component installed on, or take the defaults without the parameter"
 }
 
 #cd `dirname $0`
-http_port=80
+http_port=81
 server_IP=""
 cluster_name=""
 server_password=""
@@ -176,7 +176,7 @@ sleep 5
 #ambari-server restart
 
 #安装hdfs及之前的服务
-python install_service.py $server_IP $cluster_name host_until_hdfs.json
+python install_service.py $server_IP $cluster_name host_until_hdfs.json >> service.log
 sleep 15 
 
   #判断hdfs是否已经安装，如果没有则等待安装完成
@@ -204,7 +204,7 @@ sleep 15
 
  #启动hdfs及之前的服务
  echo "starting service postgres, redis, zookeeper and hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- python start_service.py $server_IP $cluster_name host_until_hdfs.json
+ python start_service.py $server_IP $cluster_name host_until_hdfs.json >> service.log
  sleep 10
  
   #判断所有journalnode是否都已经启动
@@ -232,10 +232,10 @@ sleep 15
       fi
     fi
   done
-  echo "hdfs format finished~~~"
+  echo "hdfs format finished~~~~~~~~~~~~~~~~~~~~~~"
 
 #安装hdfs之后的所有服务
-python install_service.py $server_IP $cluster_name host_after_hdfs.json
+python install_service.py $server_IP $cluster_name host_after_hdfs.json >> service.log
 sleep 10
 
 #判断astro是否已经安装完成
@@ -254,4 +254,4 @@ spawn ssh $astro_host
 EOF
 
  #启剩余所有服务
-python start_service.py $server_IP $cluster_name host_after_hdfs.json
+python start_service.py $server_IP $cluster_name host_after_hdfs.json >> service.log

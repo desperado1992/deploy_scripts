@@ -12,7 +12,7 @@ if [ $data_dir == "/" ]
 then
 	mkdir /data1 /data2
 	
-	echo "数据将直接保存在/data1 和 /data2 目录中，请确保此目录有足够的空间"
+	echo "the data will be stored in /data1 and /data2, ensure disk capacity of the directories"
 	
 	cat ip.txt |while read line;
 	do

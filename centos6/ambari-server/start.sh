@@ -3,19 +3,17 @@
 function print_usage(){
   echo "Usage: start [-options]"
   echo " where options include:"
-  echo "     -help                          帮助文档"
-  echo "     -ambari_ip <ip>                (必填)ambari-server所在主机的IP"
-  echo "     -http_port <port>              http服务端口号，如果不填写,则该参数默认设置为: 81"
-  echo "     -cluster_name <name>           集群名称，如果不填写,则该参数默认设置为: sugo_cluster"
-
-  echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
-  echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
-  echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
-  echo "     -skip_http                     不安装yum源服务"
-  echo "     -skip_createdir                不创建元数据存储目录"
-  echo "     -skip_ssh                      不安装ssh免密码"
-  echo "     -skip_jdk                      不安装jdk"
-  echo "     -skip_cluster_services         不创建集群且不安装服务，部署过程仅进行到ambari-server安装完成"
+  echo "     -help                          Documentation"
+  echo "     -ambari_ip <ip>                (required) The IP of Ambari-Server"
+  echo "     -http_port <port>              Http port, default: 81"
+  echo "     -cluster_name <name>           The name of cluster, default: sugo_cluster"
+  echo "     -skip_ambari                   If installed ambari-server, you can add the parameter to skip the install of ambari-server"
+  echo "     -csv                           Choose the hosts that the component installed on, or take the defaults without the parameter"
+  echo "     -skip_http                     Add the parameter if the httpd serviceyou installed"
+  echo "     -skip_createdir                Add the parameter if the directories created"
+  echo "     -skip_ssh                      Add the parameter if the password-less SSH configured"
+  echo "     -skip_jdk                      Add the parameter if jdk installed"
+  echo "     -skip_cluster_services         Just install ambari-server, don't create the cluster,and don't install service by the scripts"
 }
 
 #cd `dirname $0`
@@ -81,7 +79,7 @@ fi
 if [ "$skip_ambari" = "" ];then
   ambari_server_dir="/var/lib/ambari-server"
   if [ -d "$ambari_server_dir" ];then
-    echo "/var/lib/ambari-server目录已存在，请确认是否已经安装过ambari-server！如果安装过ambari，请先彻底删除相关目录！如果无需重复安装，请加上参数: -skip_ambari "
+    echo "The directory /var/lib/ambari-server exists, make sure you never installed ambari-server. delete the directory or add the parameter if you have installed ambari-server"
     exit 1
   fi
 fi
@@ -90,9 +88,9 @@ fi
 if [ $skip_http -eq 0 ]
   then
     ./sugo_yum_inst.sh $http_port
-      echo "~~~~~~~~~~~~httpd installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "~~~~~~~~~~~~httpd installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
-    echo "~~~~~~~~~~~~http server skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "~~~~~~~~~~~~http server skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi
 
 #修改astro包名
@@ -167,6 +165,7 @@ if [ "$skip_ambari" = "" ];then
   ambari_server_dir="/var/lib/ambari-server"
   if [ ! -d "$ambari_server_dir" ];then
     #安装ambari-server
+    echo "~~~~~~~~~~~~installing ambari-server~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     ./ambari_server_inst.sh $baseurl
   fi
 fi
