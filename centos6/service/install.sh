@@ -31,10 +31,22 @@ done
 
 #根据../ambari-server/host文件内的行数判断journalnode_stat的值
 journalnode_stat=""
+
+if [ "$csv" = "" ];then
+    journalnode_num=`cat ../ambari-server/host | wc -l`
+else
+    journalnode_hosts=`cat ../conf/hosts.csv | grep SUGO_JOURNALNODE | cut -d \, -f 3-`
+    arr=(${journalnode_hosts//,/ })
+    journalnode_num=0
+    for i in ${arr[@]}
+    do
+        journalnode_num=$[$journalnode_num + 1]
+    done
+fi
+
 i=0
-n=`cat ../ambari-server/host | wc -l`
 while true;do
-  if [ $i -lt $n ];then
+  if [ $i -lt $journalnode_num ];then
     journalnode_stat=$journalnode_stat"STARTED"
 	i=$[$i+1]
 	continue
@@ -141,8 +153,8 @@ cd -
 #判断httpd服务是否已启动
 http_service=`netstat -ntlp | grep $http_port | grep httpd`
 if [ "$http_service" = "" ];then
-echo "service http not running, please start it first!"
-exit
+    echo "service http not running, please start it first!"
+    exit
 fi
 
 #判断ambari-server是否已经启动，如果没有，则等待启动完成
@@ -187,7 +199,7 @@ sleep 15
   do
     hdfs_dir="/opt/apps/hadoop_sugo"
     if [ ! -d "$hdfs_dir" ];then
-      sleep 2
+      sleep 3
     y=$[$y+1]
     if [ $y -lt 180 ];then
         printf "."
@@ -218,7 +230,11 @@ sleep 15
       # hdfs初始化
       echo "formating hdfs~~~"
       #创建pg数据库并格式化hdfs
-      ./hdfsformat.sh $server_password $server_IP $cluster_name
+      if [ "$csv" = "" ];then
+          ./hdfsformat.sh -server_IP $server_IP -cluster_name $cluster_name
+      else
+          ./hdfsformat.sh -server_IP $server_IP -cluster_name $cluster_name -csv
+      fi
       break
     else
       sleep 5

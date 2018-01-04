@@ -9,7 +9,7 @@ function print_usage(){
   echo "     -cluster_name <name>           The name of cluster, default: sugo_cluster"
   echo "     -skip_ambari                   If installed ambari-server, you can add the parameter to skip the install of ambari-server"
   echo "     -csv                           Choose the hosts that the component installed on, or take the defaults without the parameter"
-  echo "     -skip_http                     Add the parameter if the httpd serviceyou installed"
+  echo "     -skip_http                     Add the parameter if the httpd service installed before and you do not want change http port"
   echo "     -skip_createdir                Add the parameter if the directories created"
   echo "     -skip_ssh                      Add the parameter if the password-less SSH configured"
   echo "     -skip_jdk                      Add the parameter if jdk installed"
@@ -90,7 +90,17 @@ if [ $skip_http -eq 0 ]
     ./sugo_yum_inst.sh $http_port
     echo "~~~~~~~~~~~~httpd installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
-    echo "~~~~~~~~~~~~http server skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    http_port_status=`netstat -ntlp | grep $http_port`
+    if [ "$http_port_status" = "" ];then
+      echo "please add -http_port <port> and start httpd~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      exit 1
+    else
+      if [ ! -d "/var/www/html/sugo_yum" ]; then
+        echo "directory /var/www/html/sugo_yum is not exists, make sure your httpd service available!~~~~~~"
+        exit 1
+      fi
+      echo "~~~~~~~~~~~~http server skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    fi
 fi
 
 #修改astro包名
@@ -105,23 +115,23 @@ baseurl=http://$ambari_ip:$http_port/sugo_yum
 
 #相关依赖并开启ntpd
 ./install_dependencies.sh
-echo "~~~~~~~~~~~~directory created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "~~~~~~~~~~~~dependencies installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #分发hosts文件
 if [ $skip_ssh -eq 0 ]
   then
     ./scp_hosts.sh
     echo "~~~~~~~~~~~~hosts file success coped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  else
+else
     echo "~~~~~~~~~~~~scp hosts file skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi
 
-#创建元数据存储目录
+#创建数据存储目录
 if [ $skip_createdir -eq 0 ]
   then
     ./create_datadir.sh
     echo "~~~~~~~~~~~datadir success created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  else
+else
     echo "~~~~~~~~~~~create datadir skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi
 
