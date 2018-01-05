@@ -180,15 +180,15 @@ sleep 15
   #do
   #  hdfs_dir="/opt/apps/hadoop_sugo"
   #  if [ ! -d "$hdfs_dir" ];then
-  #    sleep 2
-  #  y=$[$y+1]
-  #  if [ $y -lt 180 ];then
-  #      printf "."
-  #      continue
-  #  else
-  #      echo -e "\n==========Timeout==========\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
-  #      exit 1
-  #  fi
+  #      sleep 2
+  #      y=$[$y+1]
+  #      if [ $y -lt 180 ];then
+  #          printf "."
+  #          continue
+  #      else
+  #          echo -e "\n==========Timeout==========\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
+  #          exit 1
+  #      fi
   #  else
   #    break
   #  fi
