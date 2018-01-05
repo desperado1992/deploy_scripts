@@ -2,16 +2,11 @@ import json, sys, os
 
 output_file=sys.argv[1]
 lines=open(output_file, "r+").readlines()
-if os.path.exists("hostbeforhdfs.json"):
-    os.remove("hostbeforhdfs.json")
-if os.path.exists("hostafterhdfs.json"):
-    os.remove("hostafterhdfs.json")
+if os.path.exists("hosts_scv.json"):
+    os.remove("hosts_csv.json")
 services1=[]
-services2=[]
 service1={}
-service2={}
-a=["POSTGRES_SUGO", "REDIS_SUGO", "ZOOKEEPER_SUGO", "HDFS_SUGO"]
-b=["YARN_SUGO", "MAPREDUCE_SUGO", "KAFKA_SUGO", "GATEWAY_SUGO", "DRUIDIO_SUGO", "ASTRO_SUGO"]
+a=["POSTGRES_SUGO", "REDIS_SUGO", "ZOOKEEPER_SUGO", "GATEWAY_SUGO", "DRUIDIO_SUGO", "ASTRO_SUGO"]
 for line in lines:
     components={}
     server=line.split(",")[0]
@@ -28,25 +23,11 @@ for line in lines:
             service1[server]=components
     else:
         service1[server]=components
-    if service2.keys():
-        if server in service2.keys():
-            service2[server][component]=hosts
-        else:
-            service2[server]=components
-    else:
-        service2[server]=components
 
 for srv in a:
     obj={srv: service1[srv]}
     services1.append(obj)
 
-for srv in b:
-    obj={srv: service2[srv]}
-    services2.append(obj)
-
-m=open("hostbeforhdfs.json", 'w')
+m=open("hosts_csv.json", 'w')
 m.write(str(json.dumps(services1)))
 m.close()
-n=open("hostafterhdfs.json", 'w')
-n.write(str(json.dumps(services2)))
-n.close()

@@ -178,8 +178,7 @@ if [ "$csv" = "" ];then
   cp host_* ../service/
 else
   python csv_json.py hosts.csv
-  cp hostbeforhdfs.json ../service/host_until_hdfs.json 
-  cp hostafterhdfs.json ../service/host_after_hdfs.json
+  cp hosts_csv.json ../service/hosts.json
 fi
 cd -  
 
