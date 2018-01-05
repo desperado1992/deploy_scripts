@@ -7,4 +7,22 @@
     <description></description>
     <value>customer</value>
   </property>
+
+  <property>
+  <name>hdfs-site.xml</name>
+  <description>使用已有hadoop时，hadoop的hdfs-site.xml配置文件的配置内容</description><value>
+-
+-
+  </value>
+  </property>
+
+  <property>
+  <name>core-site.xml</name>
+  <description>使用已有hadoop时，hadoop的core-site.xml配置文件的配置内容</description>
+  <value>
+-
+-
+  </value>
+  </property>
+
 </configuration>

@@ -172,10 +172,10 @@ if [ "$skip_ambari" = "" ];then
 fi
 
 #判断是通过csv格式自定义服务安装的位置还是按照默认安装服务
-rm -rf ../service/host_*
+rm -rf ../service/hosts.json
 cd ../conf/
 if [ "$csv" = "" ];then
-  cp host_* ../service/
+  cp hosts.json ../service/
 else
   python csv_json.py hosts.csv
   cp hosts_csv.json ../service/hosts.json
