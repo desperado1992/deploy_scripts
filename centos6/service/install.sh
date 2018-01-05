@@ -111,8 +111,7 @@ fi
 #获取namenode及astro所在主机并替换astro和druid的配置项
 cd ../service/
 rm -rf namenode_astro_host.txt
-python get_host.py host_until_hdfs.json namenode_astro_host.txt
-python get_host.py host_after_hdfs.json namenode_astro_host.txt
+python get_host.py hosts.json namenode_astro_host.txt
 
 namenode1=`cat namenode_astro_host.txt | grep "namenode1" | awk '{print $2}'`
 namenode2=`cat namenode_astro_host.txt | grep "namenode2" | awk '{print $2}'`
