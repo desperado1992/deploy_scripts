@@ -43,8 +43,8 @@ spawn ssh $3
 		expect {
 	"*yes/no*" { send "yes\n"
 		expect "*assword:" { send "$2\n" } }
-	"*assword:" { send "$2\n" } }
-	
+	"*assword:" { send "$2\n" }
+	"*~]#*" { send "\n"}}
 		expect "*~]\#*"
 EOF
 
