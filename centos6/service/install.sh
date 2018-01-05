@@ -246,33 +246,33 @@ spawn ssh $astro_host
                 expect "*]#*"
 EOF
 
-#copy hdfs-site.xml and core-site.xml to the directory of druid
-cat ../ambari-server/host |while read line;
-do
-hn=`echo $line|awk '{print $1}'`
-pw=`echo $line|awk '{print $2}'`
-local_hn=`hostname`
-
-/usr/bin/expect <<-EOF
-set timeout 100000
-spawn ssh $hn
-        expect {
-        "*yes/no*" { send "yes\n"
-        expect "*assword:" { send "$pw\n" } }
-        "*assword:" { send "$pw\n" }
-        "*]#*"
-        }
-                expect "*]#*"
-        send "wget $baseurl/deploy_scripts/centos6/service/druid_hadoop_conf.sh\n"
-                expect "*]#*"
-        send "chmod 755 druid_hadoop_conf.sh\n"
-                expect "*]#*"
-        send "./druid_hadoop_conf.sh $baseurl\n"
-                expect "*]#*"
-        send "rm -rf druid_hadoop_conf.sh\n"
-                expect "*]#*"
-EOF
-done
+##copy hdfs-site.xml and core-site.xml to the directory of druid
+#cat ../ambari-server/host |while read line;
+#do
+#hn=`echo $line|awk '{print $1}'`
+#pw=`echo $line|awk '{print $2}'`
+#local_hn=`hostname`
+#
+#/usr/bin/expect <<-EOF
+#set timeout 100000
+#spawn ssh $hn
+#        expect {
+#        "*yes/no*" { send "yes\n"
+#        expect "*assword:" { send "$pw\n" } }
+#        "*assword:" { send "$pw\n" }
+#        "*~]#*" { send "\n"}
+#        }
+#                expect "*]#*"
+#        send "wget $baseurl/deploy_scripts/centos6/service/druid_hadoop_conf.sh\n"
+#                expect "*]#*"
+#        send "chmod 755 druid_hadoop_conf.sh\n"
+#                expect "*]#*"
+#        send "./druid_hadoop_conf.sh $baseurl\n"
+#                expect "*]#*"
+#        send "rm -rf druid_hadoop_conf.sh\n"
+#                expect "*]#*"
+#EOF
+#done
 
  #启动服务
 python start_service.py $server_IP $cluster_name hosts.json >> service.log

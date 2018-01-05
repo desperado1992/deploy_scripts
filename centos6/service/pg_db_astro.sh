@@ -48,7 +48,7 @@ done
     if [ ! -d "$astro_dir" ];then
       sleep 3
       x=$[$x+1]
-      if [ $x -lt 120 ];then
+      if [ $x -lt 180 ];then
         printf "."
         continue
       else
