@@ -26,9 +26,9 @@ fi
   do
     astro_dir="/opt/apps/astro_sugo"
     if [ ! -d "$astro_dir" ];then
-      sleep 2
+      sleep 3
       x=$[$x+1]
-      if [ $x -lt 60 ];then
+      if [ $x -lt 120 ];then
         printf "."
         continue
       else

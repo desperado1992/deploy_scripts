@@ -247,13 +247,12 @@ spawn ssh $astro_host
 EOF
 
 #copy hdfs-site.xml and core-site.xml to the directory of druid
-cat ../host |while read line;
+cat ../ambari-server/host |while read line;
 do
 hn=`echo $line|awk '{print $1}'`
 pw=`echo $line|awk '{print $2}'`
 local_hn=`hostname`
 
-if [ "$hn" != "$local_hn" ];then
 /usr/bin/expect <<-EOF
 set timeout 100000
 spawn ssh $hn
@@ -273,7 +272,6 @@ spawn ssh $hn
         send "rm -rf druid_hadoop_conf.sh\n"
                 expect "*]#*"
 EOF
-fi
 done
 
  #启动服务
