@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+  <property require-input="true">
+    <name>bootstrap.servers</name>
+    <description>eg: test1.sugo.vm:9092</description>
+    <value></value>
+  </property>
+
+</configuration>
