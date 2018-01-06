@@ -167,7 +167,7 @@ sleep 5
 #ambari-server restart
 
 #安装服务
-python install_service.py $server_IP $cluster_name hosts.json >> service.log
+python install_service.py $server_IP $cluster_name hosts.json
 sleep 15 
 
 
@@ -275,4 +275,4 @@ EOF
 #done
 
  #启动服务
-python start_service.py $server_IP $cluster_name hosts.json >> service.log
+python start_service.py $server_IP $cluster_name hosts.json
