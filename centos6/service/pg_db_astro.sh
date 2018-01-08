@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #创建druid、sugo_astro/pio库
+printf "install and start postgresql"
 while true; do
 postgres_path="/opt/apps/postgres_sugo"
-echo "install and start postgresql"
 if [ ! -d "$postgres_path" ]; then
     sleep 3
     z=$[$z+1]

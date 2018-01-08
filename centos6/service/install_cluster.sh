@@ -7,10 +7,12 @@ cluster_name=$3
 
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/ASTRO_SUGO > /dev/null 2>&1
 
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/REDIS_SUGO > /dev/null 2>&1
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/REDIS_SUGO > /dev/null 2>&1
 
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/ZOOKEEPER_SUGO > /dev/null 2>&1
 
+curl -u admin:admin -H "X-Requested-By: ambari" -X PUT -d '{"RequestInfo":{"context":"Stop Service"},"Body":{"ServiceInfo":{"state":"INSTALLED"}}}'   http://$server_IP:8080/api/v1/clusters/$cluster_name/services/POSTGRES_SUGO > /dev/null 2>&1
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/POSTGRES_SUGO > /dev/null 2>&1
 
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/AMBARI_METRICS > /dev/null 2>&1
@@ -18,6 +20,8 @@ curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:808
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/DRUIDIO_SUGO > /dev/null 2>&1
 
 curl -u admin:admin -H "X-Requested-By: ambari" -X DELETE  http://$server_IP:8080/api/v1/clusters/$cluster_name/services/GATEWAY_SUGO > /dev/null 2>&1
+
+sleep 3
 
 #创建集群
 curl -u admin:admin -H "X-Requested-By: ambari" -X POST -d '{"Clusters": {"version" : "SG-1.0"}}' http://$server_IP:8080/api/v1/clusters/$cluster_name
