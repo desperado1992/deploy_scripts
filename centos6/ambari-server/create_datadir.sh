@@ -14,10 +14,10 @@ then
 	
 	echo "数据将直接保存在/data1 和 /data2 目录中，请确保此目录有足够的空间"
 	
-	cat ip.txt |while read line;
+	cat host |while read line;
 	do
-	hn=`echo $line|awk '{print $1}'`
-	pw=`echo $line|awk '{print $2}'`
+	ip=`echo $line|awk '{print $1}'`
+	hn=`echo $line|awk '{print $2}'`
 	local_hn=`hostname`
 
         if [ "$hn" != "$local_hn" ];then
