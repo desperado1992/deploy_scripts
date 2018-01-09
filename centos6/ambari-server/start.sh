@@ -110,7 +110,7 @@ if [ $skip_ssh -eq 0 ]; then
 else
     ./install_dependencies_without_pw.sh
 fi
-echo "~~~~~~~~~~~~directory created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "~~~~~~~~~~~~replies installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #分发hosts文件
 if [ $skip_ssh -eq 0 ]
