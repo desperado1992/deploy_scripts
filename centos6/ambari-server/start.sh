@@ -106,13 +106,17 @@ cd -
 baseurl=http://$ambari_ip:$http_port/sugo_yum
 
 #相关依赖并开启ntpd
-./install_dependencies.sh
+if [ $skip_ssh -eq 0 ]; then
+    ./install_dependencies.sh
+else
+    ./install_dependencies_without_pw.sh
+fi
 echo "~~~~~~~~~~~~directory created~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #分发hosts文件
 if [ $skip_ssh -eq 0 ]
   then
-    ./scp_hosts.sh
+    ./configure_hosts.sh
     echo "~~~~~~~~~~~~hosts file success coped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
     echo "~~~~~~~~~~~~scp hosts file skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
