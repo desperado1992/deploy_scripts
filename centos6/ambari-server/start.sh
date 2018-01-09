@@ -11,7 +11,6 @@ function print_usage(){
   echo "            以下参数选填，根据实际需求确定，输入格式例：-skip_ambari："
   echo "     -skip_ambari                   是否安装ambari-server，若不需要安装，则添加该参数，如: -skip_ambari  需要安装则不添加该参数"
   echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
-  echo "     -skip_http                     不安装yum源服务"
   echo "     -skip_createdir                不创建元数据存储目录"
   echo "     -skip_ssh                      不安装ssh免密码"
   echo "     -skip_jdk                      不安装jdk"
@@ -28,7 +27,7 @@ csv=""
 hostname="skip_hostname"
 skip_http=0
 skip_createdir=0
-skip_ssh=0
+skip_ssh=1
 skip_jdk=0
 skip_cluster_services=0
 
