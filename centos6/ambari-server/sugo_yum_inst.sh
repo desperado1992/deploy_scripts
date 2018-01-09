@@ -4,7 +4,7 @@
 http_port=$1
 
 #ambari-server主机安装相关软件及http服务
-yum install -y wget ntp openssh-clients expect httpd
+yum install -y httpd
 
 #关闭防火墙和seLinux
 service iptables stop
