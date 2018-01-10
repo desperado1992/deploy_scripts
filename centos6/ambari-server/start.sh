@@ -132,7 +132,7 @@ fi
 
 #初始化主机
 ./init_process.sh $baseurl
-echo "~~~~~~~~~~~init centos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "~~~~~~~~~~~inited centos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #修改ambari-server节点的hostname
 #if [ $skip_hostname != "skip_hostname" ]
