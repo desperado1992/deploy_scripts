@@ -5,8 +5,8 @@ yum install -y wget ntp openssh-clients expect
 
 cat ip.txt |while read line;
 do
-hn=`echo $line|awk '{print $1}'`
-pw=`echo $line|awk '{print $2}'`
+pw=`echo $line|awk '{print $1}'`
+hn=`echo $line|awk '{print $2}'`
 local_hn=`hostname`
 
 if [ "$hn" != "$local_hn" ];then

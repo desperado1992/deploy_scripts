@@ -1,6 +1,12 @@
 #!/bin/bash
 #如果客户已创建/data目录且位于较大磁盘分区下，则通过符号链接减少磁盘占用
 
+if [ ! -f ip.txt ]; then
+  passwd_file=host
+else
+  passwd_file=ip.txt
+fi
+
 #日志、元数据存储目录--$1
 
 cd ../../..
@@ -14,10 +20,10 @@ then
 	
 	echo "the data will be stored in /data1 and /data2, ensure disk capacity of the directories"
 	
-	cat ip.txt |while read line;
+	cat $passwd_file |while read line;
 	do
-	hn=`echo $line|awk '{print $1}'`
-	pw=`echo $line|awk '{print $2}'`
+	pw=`echo $line|awk '{print $1}'`
+	hn=`echo $line|awk '{print $2}'`
 	local_hn=`hostname`
 
         if [ "$hn" != "$local_hn" ];then
@@ -43,10 +49,10 @@ else
 	ln -s $data_dir/data1 /
 	ln -s $data_dir/data2 /
 
-	cat ip.txt |while read line;
+	cat $passwd_file |while read line;
 	do
-	hn=`echo $line|awk '{print $1}'`
-	pw=`echo $line|awk '{print $2}'`
+	pw=`echo $line|awk '{print $1}'`
+	hn=`echo $line|awk '{print $2}'`
         local_hn=`hostname`
 
         if [ "$hn" != "$local_hn" ];then	

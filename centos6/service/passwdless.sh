@@ -5,7 +5,7 @@
 #NameNode2 = $3
 #passwd2 = $4
 
-#Namenode1上hdfs用户生成ssh秘钥对
+#Namenode1上hdfs用户生成ssh秘钥对,
 ssh $1 "yum install -y expect"
 /usr/bin/expect <<-EOF
 set timeout 100000
@@ -18,10 +18,11 @@ spawn ssh $1
 	send "\n"
         expect "*again:*"
 	send "\n"
-		expect "*]\$*"}}
+		expect "*]\$*" }}
+		expect "*~]\#*"
 EOF
 
-#Namenode2上hdfs用户生成ssh秘钥对，并将authorized_keys复制到NameNode1
+#Namenode2上hdfs用户生成ssh秘钥对
 ssh $3 "yum install -y expect"
 /usr/bin/expect <<-EOF
 set timeout 100000
@@ -34,42 +35,31 @@ spawn ssh $3
 	send "\n"
         expect "*again:*"
 	send "\n"
-		expect "*]\$*"
-	send "cat /home/hdfs/.ssh/id_rsa.pub >> /home/hdfs/.ssh/authorized_keys\n"}}
-		expect "*]\$*"
-	send "exit\n"
-		expect "*~]#*"
-	send "scp /home/hdfs/.ssh/authorized_keys  $1:/home/hdfs/.ssh/\n"
-		expect {
-	"*yes/no*" { send "yes\n"
-		expect "*assword:" { send "$2\n" } }
-	"*assword:" { send "$2\n" }
-	"*~]#*" { send "\n"}}
+		expect "*]\$*" }}
 		expect "*~]\#*"
 EOF
+
+#copy authorized_key to namenode1 and namenode2
+scp $1:/home/hdfs/.ssh/id_rsa.pub /root/id_rsa.pub.nn1
+scp $3:/home/hdfs/.ssh/id_rsa.pub /root/id_rsa.pub.nn2
+cat /root/id_rsa.pub.nn1 >> /root/authorized_keys
+cat /root/id_rsa.pub.nn2 >> /root/authorized_keys
+scp /root/authorized_keys $1:/home/hdfs/.ssh/
+scp /root/authorized_keys $3:/home/hdfs/.ssh/
 
 #NameNode1生成包含NameNode1和NameNode2的authorized_keys，且将其发送给NameNode2，赋予.ssh文件夹及其文件权限
 ssh $1 "chown hdfs:hdfs /home/hdfs/.ssh/authorized_keys"
 /usr/bin/expect <<-EOF
 set timeout 100000
 spawn ssh $1
-	expect "*~]#*" { send "su - hdfs\n"
-		expect "*~]\$*" 
-	send "cat /home/hdfs/.ssh/id_rsa.pub >> /home/hdfs/.ssh/authorized_keys\n"
+	expect "*~]#*" { send "chown -R hdfs:hdfs /home/hdfs/.ssh\n"
+		expect "*~]\#*"
+	send "su - hdfs\n"
 		expect "*~]\$*"
 	send "chmod 700 .ssh/\n"
         expect "*~]\$*"
 	send "chmod 600 .ssh/*\n"
 		expect "*~]\$*"
-	send "exit\n"
-		expect "*]#*"
-	send "scp /home/hdfs/.ssh/authorized_keys root@$3:/home/hdfs/.ssh/\n"
-		expect {
-	"*yes/no*" { send "yes\n"
-		expect "*assword:" { send "$4\n" } }
-	"*assword:" { send "$4\n" } 
-	"*]#*" { send "\n"}}
-		expect "*]#*"}
 EOF
 
 
@@ -77,8 +67,10 @@ EOF
 /usr/bin/expect <<-EOF
 set timeout 100000
 spawn ssh $3
-	expect "*~]#*" { send "su - hdfs\n"
-		expect "*~]\$*" 
+	expect "*~]#*" { send "chown -R hdfs:hdfs /home/hdfs/.ssh\n"
+		expect "*~]\#*"
+	send "su - hdfs\n"
+		expect "*~]\$*"
 	send "chmod 700 .ssh/\n"
         expect "*~]\$*"
 	send "chmod 600 .ssh/*\n"

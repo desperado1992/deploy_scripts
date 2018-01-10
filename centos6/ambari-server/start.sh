@@ -168,7 +168,7 @@ fi
 #安装jdk
 if [ $skip_jdk -eq 0 ]
   then
-    ./jdk-inst.sh $baseurl ip.txt
+    ./jdk-inst.sh $baseurl
     echo "~~~~~~~~~~~jdk success installed~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   else
     echo "~~~~~~~~~~~jdk install skipped~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

@@ -1,16 +1,20 @@
 #!/bin/bash
 
 baseurl=$1
-conf_file=$2
 init_url=$baseurl/deploy_scripts/centos6/ambari-server
 
+if [ ! -f ip.txt ]; then
+  passwd_file=host
+else
+  passwd_file=ip.txt
+fi
 
 ./jdk.sh $baseurl
 
-cat $conf_file | while read line;
+cat $passwd_file | while read line;
 do
-hn=`echo $line|awk '{print $1}'`
-pw=`echo $line|awk '{print $2}'`
+pw=`echo $line|awk '{print $1}'`
+hn=`echo $line|awk '{print $2}'`
 local_hn=`hostname`
 
 if [ "$hn" != "$local_hn" ];then
