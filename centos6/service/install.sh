@@ -7,7 +7,6 @@ function print_usage(){
   echo "     -http_port <port>              http服务端口号"
   echo "     -server_IP <server_IP>         ambari-server所在主机的IP"
   echo "     -cluster_name <name>           集群名称"
-  echo "     -server_password <server_password>    ambari-server所在主机的root用户密码"
   echo "     -csv                           选择自定义csv格式的文件或按照默认来安装服务，默认时不填写该参数"
 }
 
@@ -15,7 +14,6 @@ function print_usage(){
 http_port=80
 server_IP=""
 cluster_name=""
-server_password=""
 csv=""
 
 while [[ $# -gt 0 ]]; do
@@ -24,7 +22,6 @@ while [[ $# -gt 0 ]]; do
        -http_port) http_port=$2 && shift 2;;
        -server_IP) server_IP=$2 && shift 2;;
        -cluster_name) cluster_name=$2 && shift 2;;
-       -server_password) server_password=$2 && shift 2;;
        -csv) csv=1 && shift ;;
     esac
 done
@@ -62,12 +59,6 @@ fi
 if [ "$cluster_name" = "" ]
   then
     echo "-cluster_name is required!"
-    exit 1
-fi
-
-if [ "$server_password" = "" ]
-  then
-    echo "-server_password is required!"
     exit 1
 fi
 
@@ -169,67 +160,6 @@ sleep 5
 #安装服务
 python install_service.py $server_IP $cluster_name hosts.json
 sleep 15 
-
-
-
-  ##判断hdfs是否已经安装，如果没有则等待安装完成
-  #hdfs_dir="/opt/apps/hadoop_sugo"
-  #printf "waiting for hdfs to be installed"
-  #y=0
-  #while [ ! -d "$hdfs_dir" ]
-  #do
-  #  hdfs_dir="/opt/apps/hadoop_sugo"
-  #  if [ ! -d "$hdfs_dir" ];then
-  #      sleep 2
-  #      y=$[$y+1]
-  #      if [ $y -lt 180 ];then
-  #          printf "."
-  #          continue
-  #      else
-  #          echo -e "\n==========Timeout==========\nThe installation of HDFS failed, please check the configurations and run start.sh again!"
-  #          exit 1
-  #      fi
-  #  else
-  #    break
-  #  fi
-  #done
-  #echo ""
-
- ##启动hdfs及之前的服务
- #echo "starting service postgres, redis, zookeeper and hdfs~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- #python start_service.py $server_IP $cluster_name host_until_hdfs.json
- #sleep 10
- #
- # #判断所有journalnode是否都已经启动
- # printf "waiting for journalnode to start"
- # z=0
- # while true;do
- # curl -u admin:admin -H "X-Requested-By: ambari" -X GET "http://$server_IP:8080/api/v1/clusters/$cluster_name/components/?ServiceComponentInfo/category=SLAVE&fields=ServiceComponentInfo/service_name,host_components/HostRoles/display_name,host_components/HostRoles/host_name,host_components/HostRoles/state,host_components/HostRoles/maintenance_state,host_components/HostRoles/stale_configs,host_components/HostRoles/ha_state,host_components/HostRoles/desired_admin_state,&minimal_response=true&_=1499937079425" > slave.json
- # python slave.py slave.json > slave.txt
- # state=`sed ':a;N;$!ba;s/\n//g' slave.txt`
- #   if [ "$state" = "$journalnode_stat" ];then
- #     # hdfs初始化
- #     echo "formating hdfs~~~"
- #     #创建pg数据库并格式化hdfs
- #     ./hdfsformat.sh $server_password $server_IP $cluster_name
- #     break
- #   else
- #     sleep 5
- #     z=$[$z+1]
- #     if [ $z -lt 60 ];then
- #       printf "."
- #       continue
- #     else
- #       echo -e "\n==========Timeout==========\nThe start of HDFS failed, you can start HDFS on http://"'$ambari_server'":8080, or check the configurations and run start.sh again!"
- #       exit 1
- #     fi
- #   fi
- # done
- # echo "hdfs format finished~~~"
-
-#安装hdfs之后的所有服务
-#python install_service.py $server_IP $cluster_name host_after_hdfs.json
-#sleep 10
 
 #判断astro是否已经安装完成
 /usr/bin/expect <<-EOF
