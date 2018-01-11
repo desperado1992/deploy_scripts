@@ -9,7 +9,7 @@
   </property>
   <property>
     <name>druid.license.signature</name>
-    <description>产品密钥，请联系sugo.io获取</description>
-    <value>please contact sugo to get the license</value>
+    <description></description>
+    <value>48710FA3F1CDBA39FB3472BAA9E2497A32C79A03AB0DA6646D5B4B77A6206311DFEDD476990F3B9D</value>
   </property>
 </configuration>
